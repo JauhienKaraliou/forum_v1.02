@@ -11,6 +11,13 @@ class User {
     private $resp = true;
     private $errors = array();
 
+    /**
+     * может конструкт надо переназвать в registerUser?
+     * я понимаю этот метод при создании объекта формирует массив данных который затем записывается а БД при
+     * регистрации пользователя
+     *
+     *
+     */
     public  function __construct(){
         if (isset($_POST['name'])) {
             $this -> userData['name'] = trim($_POST['name']);
@@ -110,6 +117,28 @@ class User {
        } else {
            return false;
        }
+    }
+
+    public function checkIfValid($username, $password)
+    {
+        $arr['username'] =$username;
+        $arr['password'] = sha1($password);
+        if($this->dbh->isUser($arr)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function logOut()
+    {
+        $_SESSION['islogged']=null;
+        $_SESSION['username']=null;
+        $_COOKIE['username']=null;
+        $_COOKIE['password']=null;
+        setcookie("username",'',time()-3600*25);
+        setcookie("password",'',time()-3600*25);
+        return true;
     }
 
 

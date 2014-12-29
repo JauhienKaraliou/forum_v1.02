@@ -98,6 +98,34 @@ class Utils
         var_dump($Mail->ErrorInfo);
     }
 
+    public static function checkPost($key)
+    {
+        $res = (isset($_POST[$key]))?true:false;
+        return $res;
+    }
+
+    public static function checkSession($key)
+    {
+        $res = (isset($_SESSION[$key]))?true:false;
+        return $res;
+    }
+
+    public static function checkCookies($key)
+    {
+        $res = (isset($_COOKIE[$key]))?true:false;
+        return $res;
+    }
+
+    public static function checkGet($key, $val)
+    {
+        $res = (isset($_POST[$key]) and $_POST[$key]==$val)?true:false;
+        return $res;
+    }
+
+
+
+
+
 
 
 }

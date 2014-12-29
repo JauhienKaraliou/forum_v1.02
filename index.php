@@ -16,6 +16,18 @@ $page = new Template('header'); //? а ожет класс сделать ста
 
 $p.= Template::getPageElement('header',array('PAGE_TITLE'=>'IT Forum'));
 if(Utils::checkPost('logout')) {
-    $user->logOut();
+    $user->logOut();  //or include 'logout.php' но если в нём будет один толко вызов метода то есть ли смысл
 }
+
+if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
+    include 'home.php';
+} elseif (Utils::checkGet('area','registration')) {
+    include 'registration.php';
+} else {
+    include 'login.php';
+}
+$p.=Template::getPageElement('footer', array('YEAR'=>'2014'));
+
+
+
 echo $p;

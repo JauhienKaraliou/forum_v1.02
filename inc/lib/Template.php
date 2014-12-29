@@ -52,11 +52,12 @@ class Template{
     public static function getPageElement($name, array $statements)
     {
         $fileName = TPL_DIR . DIRECTORY_SEPARATOR . $name . '.html';
+        $p='';
         if(file_exists($fileName)) {
             $template = file_get_contents($fileName);
-        }
-        foreach($statements as $key => $val) {
-            $p = str_replace('{{'.$key.'}}', $val, $template);
+            foreach ($statements as $key => $val) {
+                $p = str_replace('{{' . $key . '}}', $val, $template);
+            }
         }
         return $p;
     }

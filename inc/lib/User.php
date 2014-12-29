@@ -123,11 +123,11 @@ class User {
     {
         $arr['username'] =$username;
         $arr['password'] = sha1($password);
-        if($this->dbh->isUser($arr)) {
-            return true;
-        } else {
-            return false;
-        }
+        $sth = DB::getInstance()->prepare('SELECT `idusers` FROM `users` WHERE `username`=:username and `password`=:password');
+        $sth->execute($arr);
+        $res=($sth->fetchAll())?true:false;
+        return $res;
+
     }
 
     public function logOut()

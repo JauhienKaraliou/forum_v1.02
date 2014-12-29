@@ -48,4 +48,16 @@ class Template{
     public function __toString(){
         return $this -> tpl;
     }
+
+    public static function getPageElement($name, array $statements)
+    {
+        $fileName = TPL_DIR . DIRECTORY_SEPARATOR . $name . '.html';
+        if(file_exists($fileName)) {
+            $template = file_get_contents($fileName);
+        }
+        foreach($statements as $key => $val) {
+            $p = str_replace('{{'.$key.'}}', $val, $template);
+        }
+        return $p;
+    }
 }

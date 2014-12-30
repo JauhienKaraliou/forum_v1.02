@@ -10,7 +10,7 @@ define('PAGE_MES', 5);
 define('CLS_DIR', 'lib');
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASSWORD', '7781070');
+define('DB_PASSWORD', '1276547');
 define('DB_NAME', 'forum');
 define('DB_DSN', 'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8');
 define('BASE_URL', 'http://localhost:81/forum_v1.02/index.php');
@@ -25,8 +25,6 @@ function my__autoload($classname) {
         require_once($filename);
         return true;
     }
-
     return false;
 }
-
 spl_autoload_register('my__autoload');

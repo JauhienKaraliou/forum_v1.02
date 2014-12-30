@@ -132,10 +132,4 @@ class User {
         $res= $sth->fetchAll();
         return $res;
     }
-
-   // public static function g
-
-
-
-
 }

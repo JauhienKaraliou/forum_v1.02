@@ -134,10 +134,4 @@ class Utils
         setcookie("password",'',time()-3600*25);
         return true;
     }
-
-
-
-
-
-
 }

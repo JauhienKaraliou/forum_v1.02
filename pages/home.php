@@ -22,7 +22,6 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
         setcookie("username",$username, time()+3600*24);
         setcookie("password",$password,time()+3600*24);  //засунуть в метод
     }
-
 } elseif(isset($_POST['username']) and isset($_POST['password'])) {
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
@@ -31,7 +30,6 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
         setcookie("username",$username, time()+3600*24);
         setcookie("password",$password,time()+3600*24);  //засунуть в метод
     }
-
 } else {
     include 'authorization.php';
 }
@@ -47,15 +45,13 @@ if($islogged) {
         $sth=DB::getInstance()->prepare('SELECT `id` FROM `users` WHERE `name`=:name');
         $sth->execute(array('name'=>$_SESSION['username']));
         $currentID = $sth->fetch(PDO::FETCH_ASSOC);
-        var_dump($currentID, $formID);
         if($currentID['id'] == $formID) {
-            echo '11111111111';
-            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email, `about_me`=:about_me');
-            $sth->execute(array('name'=>$_POST['name'], 'email'=>$_POST['email'],'about_me'=>$_POST['about_me']));
-            //echo $sth->errorInfo();
+            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email,
+ `about_me`=:about_me WHERE `id`=:id ');
+            $arr = array('id'=>$_POST['id'],'name'=>$_POST['name'], 'email'=>$_POST['email'], 'about_me'=>$_POST['about_me']);
+            $sth->execute($arr);
         }
     }
-
 } else {
     $p = Template::getPageElement('formlogin',array('WRONG_LOGIN_MESSAGE'=>'Login/password does not match'));
 }

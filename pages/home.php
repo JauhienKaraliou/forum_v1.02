@@ -16,7 +16,7 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
 } elseif (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
     $username = htmlspecialchars($_COOKIE['username']);
     $password = htmlspecialchars($_COOKIE['password']);
-    $islogged = $user->checkIfValid($username, $password);
+    $islogged = User::checkIfValid($username, $password);
 
     if($islogged) {
         setcookie("username",$username, time()+3600*24);
@@ -26,7 +26,7 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
 } elseif(isset($_POST['username']) and isset($_POST['password'])) {
     $username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
-    $islogged = $user->checkIfValid($username, $password);
+    $islogged = User::checkIfValid($username, $password);
     if(isset($_POST['stay_logged_in']) and $islogged==true) {
         setcookie("username",$username, time()+3600*24);
         setcookie("password",$password,time()+3600*24);
@@ -36,11 +36,11 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
     include 'authorization.php';
 }
 if($islogged) {
-    $p.= Template::getPageElement('formlogout',array(''=>''));
+    //$p.= Template::getPageElement('formlogout',array(''=>''));
     $_SESSION['username']= $username;
     $_SESSION['islogged'] = true;
-    $p.= Template::getPageElement('userpages',array('USER_PAGES_LINK'=>'?area=pages',
-        'USER_PAGES'=>'User individual pages'));
+    //$p.= Template::getPageElement('userpages',array('USER_PAGES_LINK'=>'?area=pages',
+        //'USER_PAGES'=>'User individual pages'));
     if(Utils::checkGet('area','pages')) {
         include 'pages/userpages.php';
     }

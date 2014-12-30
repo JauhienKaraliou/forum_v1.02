@@ -117,11 +117,11 @@ class User {
        }
     }
 
-    public function checkIfValid($username, $password)
+    public static function checkIfValid($username, $password)
     {
         $arr['username'] =$username;
-        $arr['password'] = sha1($password);
-        $sth = DB::getInstance()->prepare('SELECT `idusers` FROM `users` WHERE `username`=:username and `password`=:password');
+        $arr['password'] = md5($password);
+        $sth = DB::getInstance()->prepare('SELECT `id` FROM `users` WHERE `name`=:username and `password`=:password');
         $sth->execute($arr);
         $res=($sth->fetchAll())?true:false;
         return $res;

@@ -21,7 +21,8 @@ class Utils
      */
     public static function isFormRegisterSubmitted()
     {
-        return (isset($_POST['name']) AND isset($_POST['email']) AND isset($_POST['password']) AND isset($_POST['passwordrepeat']) AND !empty($_POST));
+        return (isset($_POST['name']) AND isset($_POST['email']) AND isset($_POST['password']) AND
+            isset($_POST['passwordrepeat']) AND !empty($_POST));
     }
 
 

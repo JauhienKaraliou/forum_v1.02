@@ -14,7 +14,7 @@ $buttons = new Template('LogInOrRegisterButtons');
 $msgButtons = '';
 $p='Главный контент форума';
 
-if(Utils::checkPost('logout')) {
+if(Utils::isButtonPressed('Exit')) {
     Utils::logOut();
 }
 

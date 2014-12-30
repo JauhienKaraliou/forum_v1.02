@@ -6,17 +6,6 @@
  */
 class Utils
 {
-    public static function userIsLoggedIn()
-    {
-        if (isset($_COOKIE['email']) and isset($_COOKIE['password'])) {
-            return true;
-        } elseif (isset($_POST['action'])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public static function isButtonPressed($str)
     {
         if (isset($_POST['action']) and $_POST['action'] == $str) {
@@ -78,7 +67,7 @@ class Utils
 
         $Mail = new PHPMailer();
         $Mail->IsSMTP(); // Use SMTP
-        $Mail->Host = "smtp.yandex.ru"; // Sets SMTP server
+        $Mail->Host = "smtp.gmail.com"; // Sets SMTP server
         $Mail->SMTPDebug = 0; // 2 to enable SMTP debug information
         $Mail->SMTPAuth = TRUE; // enable SMTP authentication
         $Mail->Port = 465; // set the SMTP port
@@ -87,9 +76,9 @@ class Utils
         $Mail->Encoding = '8bit';
         $Mail->Subject = "Feedback from my-domain.com.";
         $Mail->ContentType = "text/html; charset=utf-8\r\n";
-        $Mail->From = 'natusik.lis@yandex.ru';
-        $Mail->Username = 'natusik.lis@yandex.ru'; // SMTP account username
-        $Mail->Password = 'OlLis7781070'; // SMTP account password
+        $Mail->From = MAIL_USER;
+        $Mail->Username = MAIL_USER; // SMTP account username
+        $Mail->Password = MAIL_PASSWORD; // SMTP account password
         $Mail->FromName = 'My domain';
         $Mail->WordWrap = 900; // RFC 2822 Compliant for Max 998 characters per line
 
@@ -122,6 +111,16 @@ class Utils
         return $res;
     }
 
+    public static function logOut()
+    {
+        $_SESSION['islogged']=null;
+        $_SESSION['username']=null;
+        $_COOKIE['username']=null;
+        $_COOKIE['password']=null;
+        setcookie("username",'',time()-3600*25);
+        setcookie("password",'',time()-3600*25);
+        return true;
+    }
 
 
 

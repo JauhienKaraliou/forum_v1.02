@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ALEX
- * Date: 27.12.2014
- * Time: 2:34
- */
+
 class User {
 
     private $userData = array();
@@ -16,6 +11,7 @@ class User {
      * я понимаю этот метод при создании объекта формирует массив данных который затем записывается а БД при
      * регистрации пользователя
      *
+     * пока не дошла но додумаю !!!!!!!!!!!!!!!!
      *
      */
     public  function __construct(){
@@ -57,7 +53,9 @@ class User {
         $email = $db -> prepare('SELECT COUNT(users.id)AS count FROM users WHERE users.email = :email');
         $email->execute(array('email' => $this -> userData['email']));
         $count = $email -> fetch(PDO::FETCH_ASSOC);
-        if ($count[0]['count'] == true) {
+        var_dump($email -> errorInfo());
+        var_dump($count);
+        if (($count[0]['count'] == true) and ($count[0]['count'] == NULL)) {
             return true;
         } else {
             return false;
@@ -78,10 +76,10 @@ class User {
             $this -> resp = false;
             $this -> errors['email'] = 'Проверьте ввод email';
         }
-        if ($this -> isNotUniqueEmail(new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASSWORD))){
+        /*if ($this -> isNotUniqueEmail(new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASSWORD))){
             $this -> resp = false;
             $this -> errors['email'] = 'Такой email уже зарегистрирован';
-        }
+        }*/
         if (!preg_match('/\A(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])\S{6,}\z/', $this -> userData['password'])) {
             $this -> resp = false;
             $this -> errors['password'] = 'Пароль должен содержать хотя бы одну большую букву, маленькую букву и цифру';
@@ -130,16 +128,7 @@ class User {
 
     }
 
-    public function logOut()
-    {
-        $_SESSION['islogged']=null;
-        $_SESSION['username']=null;
-        $_COOKIE['username']=null;
-        $_COOKIE['password']=null;
-        setcookie("username",'',time()-3600*25);
-        setcookie("password",'',time()-3600*25);
-        return true;
-    }
+
 
 
 }

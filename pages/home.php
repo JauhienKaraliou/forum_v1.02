@@ -38,9 +38,22 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
 if($islogged) {
     $_SESSION['username']= $username;
     $_SESSION['islogged'] = true;
-    $p= Template::getPageElement('userpages',array('USER_PAGES'=>'User individual pages'));
+    $p= Template::getPageElement('users',array('USER_PAGES'=>'User individual pages'));
     if(Utils::isButtonPressed('userpages') OR Utils::checkGet('pageid')) {
         include 'pages/userpages.php';
+    }
+    if(Utils::isButtonPressed('rewrite')) {
+        $formID = htmlspecialchars($_POST['id']);
+        $sth=DB::getInstance()->prepare('SELECT `id` FROM `users` WHERE `name`=:name');
+        $sth->execute(array('name'=>$_SESSION['username']));
+        $currentID = $sth->fetch(PDO::FETCH_ASSOC);
+        var_dump($currentID, $formID);
+        if($currentID['id'] == $formID) {
+            echo '11111111111';
+            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email, `about_me`=:about_me');
+            $sth->execute(array('name'=>$_POST['name'], 'email'=>$_POST['email'],'about_me'=>$_POST['about_me']));
+            //echo $sth->errorInfo();
+        }
     }
 
 } else {

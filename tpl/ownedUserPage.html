@@ -1,0 +1,14 @@
+<div class="">
+    <form method="post" enctype="multipart/form-data" class="form-horizontal">
+    <dl class="dl-horizontal">
+        <dt>Name</dt>
+        <dd><input type="text" name="name" class="form-control input-md" value="{{name}}"></dd>
+        <dt>E-mail</dt>
+        <dd><input type="text" name="email" class="form-control input-md" value="{{email}}"></dd>
+        <dt>About</dt>
+        <dd><input type="text" name="about_me" class="form-control input-md" value="{{about_me}}"></dd>
+    </dl>
+        <input type="hidden" name="id" value="{{id}}">
+        <button class="btn btn-warning" type="submit" name="action" value="rewrite">Обновить</button>
+    </form>
+</div>

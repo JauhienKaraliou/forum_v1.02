@@ -1,0 +1,24 @@
+.msg {
+    color: #707070;
+    font-size: small;
+    font-style: oblique;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+p.help-block {
+    color: darkred;
+    font-weight: bold;
+}
+.greeting {
+    color: #428bca;
+}
+
+.borderdiv {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+   text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+

@@ -6,14 +6,6 @@ class User {
     private $resp = true;
     private $errors = array();
 
-    /**
-     * может конструкт надо переназвать в registerUser?
-     * я понимаю этот метод при создании объекта формирует массив данных который затем записывается а БД при
-     * регистрации пользователя
-     *
-     * пока не дошла но додумаю !!!!!!!!!!!!!!!!
-     *
-     */
     public  function __construct(){
         if (isset($_POST['name'])) {
             $this -> userData['name'] = trim($_POST['name']);
@@ -44,18 +36,12 @@ class User {
         $this -> userData['captcha'] = isset($_POST['captcha']) ? trim($_POST['captcha']) : "";
     }
 
-    public function getUserDataArray(){
-        return  $this -> userData;
-    }
-
     private function isNotUniqueEmail(){
         $db = DB::getInstance();
-        $email = $db -> prepare('SELECT COUNT(users.id)AS count FROM users WHERE users.email = :email');
+        $email = $db -> prepare('SELECT COUNT(users.id) AS count FROM users WHERE users.email = :email');
         $email->execute(array('email' => $this -> userData['email']));
         $count = $email -> fetch(PDO::FETCH_ASSOC);
-        var_dump($email -> errorInfo());
-        var_dump($count);
-        if (($count[0]['count'] == true) and ($count[0]['count'] == NULL)) {
+        if ($count['count'] == true) {
             return true;
         } else {
             return false;
@@ -76,10 +62,10 @@ class User {
             $this -> resp = false;
             $this -> errors['email'] = 'Проверьте ввод email';
         }
-        /*if ($this -> isNotUniqueEmail(new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASSWORD))){
+        if ($this -> isNotUniqueEmail()){
             $this -> resp = false;
             $this -> errors['email'] = 'Такой email уже зарегистрирован';
-        }*/
+        }
         if (!preg_match('/\A(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])\S{6,}\z/', $this -> userData['password'])) {
             $this -> resp = false;
             $this -> errors['password'] = 'Пароль должен содержать хотя бы одну большую букву, маленькую букву и цифру';
@@ -95,26 +81,38 @@ class User {
         return $this -> resp;
     }
 
+    public function getUserDataArray(){
+        return  $this -> userData;
+    }
+
     public function getFormRegisterErrors(){
         return $this -> errors;
+    }
+
+    public function getActivationCode(){
+        return $this -> userData['activation'];
+    }
+
+    public function getUserEmail(){
+        return $this -> userData['email'];
     }
 
     public function saveUserData (){
         $db = DB::getInstance();
         $password = md5($this -> userData['password']);
-        $userDataToSave = $db -> prepare('INSERT INTO users (name, email, password, about_me) VALUES (:name, :email, :password, :about_me)');
-        //var_dump($db->errorInfo());
-       if($userDataToSave->execute(array(
+        $this -> userData['activation'] = md5($this -> userData['email']);
+        $userDataToSave = $db -> prepare('INSERT INTO users (name, email, password, about_me, activation) VALUES (:name, :email, :password, :about_me, :activation)');
+        if($userDataToSave->execute(array(
             'name' => $this -> userData['name'],
             'email' => $this -> userData['email'],
             'password' => $password,
-            'about_me' => $this -> userData['aboutMe']
+            'about_me' => $this -> userData['aboutMe'],
+            'activation' => $this -> userData['activation']
         ))) {
-           //var_dump($userDataToSave->errorinfo());
-           return true;
-       } else {
-           return false;
-       }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function checkIfValid($username, $password)

@@ -22,7 +22,7 @@ class Utils
     public static function isFormRegisterSubmitted()
     {
         return (isset($_POST['name']) AND isset($_POST['email']) AND isset($_POST['password']) AND
-            isset($_POST['passwordrepeat']) AND !empty($_POST));
+            isset($_POST['passwordrepeat']));
     }
 
 
@@ -49,7 +49,7 @@ class Utils
     }
 
     /**
-     * Выполняет подстановки в переданный шаблон
+     * Выполняет подстановки данных в переданный шаблон
      * @param $tpl string - строка с макросами подстановки вида {{NAME}}
      * @param array $data - массив подстановок вида array('NAME' => 'code')
      * @return string
@@ -62,30 +62,42 @@ class Utils
         return $tpl;
     }
 
-    public static function sendMail()
+    public static function sendMail($to, $subject, $body)
     {
-        require_once('PHPMailer/class.phpmailer.php');
 
-        $Mail = new PHPMailer();
-        $Mail->IsSMTP(); // Use SMTP
-        $Mail->Host = "smtp.gmail.com"; // Sets SMTP server
-        $Mail->SMTPDebug = 0; // 2 to enable SMTP debug information
-        $Mail->SMTPAuth = TRUE; // enable SMTP authentication
-        $Mail->Port = 465; // set the SMTP port
-        $Mail->Priority = 3; // Highest priority - Email priority (1 = High, 3 = Normal, 5 = low)
-        $Mail->CharSet = 'UTF-8';
-        $Mail->Encoding = '8bit';
-        $Mail->Subject = "Feedback from my-domain.com.";
-        $Mail->ContentType = "text/html; charset=utf-8\r\n";
-        $Mail->From = MAIL_USER;
-        $Mail->Username = MAIL_USER; // SMTP account username
-        $Mail->Password = MAIL_PASSWORD; // SMTP account password
-        $Mail->FromName = 'My domain';
-        $Mail->WordWrap = 900; // RFC 2822 Compliant for Max 998 characters per line
+        $mail                = new PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPAuth      = true;
+        $mail->SMTPKeepAlive = true;
+        $mail->SMTPSecure = "ssl";
+        $mail->Host          = 'smtp.gmail.com';
+        $mail->Port          = 465;
+        $mail->Username      = MAIL_USER;
+        $mail->Password      = MAIL_PASSWORD;
+        $mail->SetFrom(MAIL_USER);
+        $mail->CharSet      = 'UTF-8';
+        $mail->Subject      = $subject;
+        $mail->MsgHTML( $body );
+        $mail->AddAddress($to);
+        $mail->send();
+        var_dump($mail->ErrorInfo);
+    }
 
-        $Mail->AddAddress('liskorzun@gmail.com');
-        $Mail->Send();
-        var_dump($Mail->ErrorInfo);
+    public static function checkActivationCode($code){
+        $db = DB::getInstance();
+        $idUser = $db -> prepare('SELECT `users`.`id`,`users`.`ustatus_id` AS status FROM `users` WHERE `users`.`activation` = :code');
+        if($idUser -> execute(array('code' => $code))){
+            $data = $idUser -> fetchAll(PDO::FETCH_ASSOC);
+            if($data[0]['status'] == 3 and count ($data) == 1){
+                $result = $db -> prepare('UPDATE `users` SET `users`.`ustatus_id` = :user WHERE `users`.`activation` = :code');
+                $result -> execute(array('user' => 2, 'code' => $code));
+                return $_SESSION['msg'] = 'Ваш аккаунт активирован. Теперь вы можете авторизоваться на форуме';
+            }elseif ($data[0]['status'] == 2){
+                return $_SESSION['msg'] = 'Ваш аккаунт уже активирован, нет необходимости активировать его снова';
+            }else {
+                return $_SESSION['msg'] = 'Неверный код активации';
+            }
+        }
     }
 
     public static function checkPost($key)

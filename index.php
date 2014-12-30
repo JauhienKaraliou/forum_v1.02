@@ -1,8 +1,4 @@
 <?php
-// прости пришлось так сделать, твоя ссылочка не работал Regixter точнее у меня
-//но доделала так думаю даже прикольнее будет https://yadi.sk/i/-gyHbUopdhb3F
-
-
 
 require_once('inc/inc.php');
 
@@ -21,6 +17,11 @@ if(Utils::isButtonPressed('Exit')) {
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/home.php';
     $buttons = new Template('ExitButton');
+} elseif (!empty($_GET['code']) && isset($_GET['code'])){
+    include 'pages/activation.php';
+} elseif (isset($_SESSION['msg'])){
+    $msgButtons = $_SESSION['msg'];
+    $_SESSION['msg'] = NULL;
 } elseif (Utils::isButtonPressed('Register')){
     include 'pages/registration.php';
     $msgButtons = "Введите персональные данные для регистрации";
@@ -30,7 +31,6 @@ if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::
 } else {
     $msgButtons = "Вы не аторизованы, поэтому не можете оставлять комментарии.<br>Пожалуйста, авторизируйтесь или зарегистрируйтесь";
 }
-
 
 $page = $page -> processTemplate(array(
     'FORM' => $p,

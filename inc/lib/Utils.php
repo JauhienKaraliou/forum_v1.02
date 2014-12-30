@@ -106,9 +106,9 @@ class Utils
         return $res;
     }
 
-    public static function checkGet($key, $val)
+    public static function checkGet($key)
     {
-        $res = (isset($_POST[$key]) and $_POST[$key]==$val)?true:false;
+        $res = (isset($_GET[$key]))?true:false;
         return $res;
     }
 

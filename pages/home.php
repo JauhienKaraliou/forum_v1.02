@@ -20,7 +20,7 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
 
     if($islogged) {
         setcookie("username",$username, time()+3600*24);
-        setcookie("password",$password,time()+3600*24);
+        setcookie("password",$password,time()+3600*24);  //засунуть в метод
     }
 
 } elseif(isset($_POST['username']) and isset($_POST['password'])) {
@@ -29,7 +29,7 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
     $islogged = User::checkIfValid($username, $password);
     if(isset($_POST['stay_logged_in']) and $islogged==true) {
         setcookie("username",$username, time()+3600*24);
-        setcookie("password",$password,time()+3600*24);
+        setcookie("password",$password,time()+3600*24);  //засунуть в метод
     }
 
 } else {
@@ -39,9 +39,10 @@ if($islogged) {
     $_SESSION['username']= $username;
     $_SESSION['islogged'] = true;
     $p= Template::getPageElement('userpages',array('USER_PAGES'=>'User individual pages'));
-    if(Utils::isButtonPressed('userpages')) {
+    if(Utils::isButtonPressed('userpages') OR Utils::checkGet('pageid')) {
         include 'pages/userpages.php';
     }
+
 } else {
     $p = Template::getPageElement('formlogin',array('WRONG_LOGIN_MESSAGE'=>'Login/password does not match'));
 }

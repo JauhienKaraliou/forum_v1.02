@@ -36,15 +36,13 @@ if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['
     include 'authorization.php';
 }
 if($islogged) {
-    //$p.= Template::getPageElement('formlogout',array(''=>''));
     $_SESSION['username']= $username;
     $_SESSION['islogged'] = true;
-    //$p.= Template::getPageElement('userpages',array('USER_PAGES_LINK'=>'?area=pages',
-        //'USER_PAGES'=>'User individual pages'));
-    if(Utils::checkGet('area','pages')) {
+    $p= Template::getPageElement('userpages',array('USER_PAGES'=>'User individual pages'));
+    if(Utils::isButtonPressed('userpages')) {
         include 'pages/userpages.php';
     }
 } else {
-    $p.= Template::getPageElement('formlogin',array('WRONG_LOGIN_MESSAGE'=>'Login/password does not match'));
+    $p = Template::getPageElement('formlogin',array('WRONG_LOGIN_MESSAGE'=>'Login/password does not match'));
 }
 

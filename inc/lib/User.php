@@ -125,7 +125,14 @@ class User {
         $sth->execute($arr);
         $res=($sth->fetchAll())?true:false;
         return $res;
+    }
 
+    public static function getAllUsers()
+    {
+        $sth = DB::getInstance()->prepare('SELECT DISTINCT `id`,`name` FROM `users`');
+        $sth->execute();
+        $res= $sth->fetchAll();
+        return $res;
     }
 
 

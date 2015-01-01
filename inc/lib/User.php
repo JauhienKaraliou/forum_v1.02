@@ -8,6 +8,7 @@ class User {
     public static $isLogged;
     public static $username;
     public static $userID;
+    public static $userStatusID;  //наверное это всё надо засовывать в массив, а то разросся
 
     public  function __construct(){
         if (isset($_POST['name'])) {
@@ -127,6 +128,7 @@ class User {
         $uInfo = $sth->fetch();
         if(isset($uInfo['id']) and $uInfo['ustatus_id']!='3') {
             self::$userID = $uInfo['id'];
+            self::$userStatusID = $uInfo['ustatus_id'];
             return true;
         } else {
             return false;

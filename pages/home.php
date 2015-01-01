@@ -13,6 +13,7 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
     User::$isLogged = true;
     User::$username = $_SESSION['username'];
     User::$userID = $_SESSION['userID'];
+    User::$userStatusID = $_SESSION['uStatusID'];
 
 } elseif (Utils::checkCookies('PHPSESSID') and User::$isLogged) {
     //  $sessionName = session_name();
@@ -36,6 +37,7 @@ if(User::$isLogged) {
     // кнопка не должна появляться
     $_SESSION['username']= User::$username;
     $_SESSION['userID'] = User::$userID;
+    $_SESSION['uStatusID'] = User::$userStatusID;
     $_SESSION['islogged'] = true;
     $p= new Template('users');
     $p = $p->processTemplate(array('USER_PAGES'=>'User individual pages'));

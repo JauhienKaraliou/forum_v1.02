@@ -7,52 +7,62 @@
  */
 
 
-$islogged=false;
-if(isset($_SESSION['islogged']) and  $_SESSION['islogged']==true and $_SESSION['username']!=null) {
-    $islogged = true;
-    $username = $_SESSION['username'];
+//User::$isLogged=false; // обнуление переменной
 
+if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::checkSession('username')) {
+    User::$isLogged = true;
+    User::$username = $_SESSION['username'];
+    User::$userID = $_SESSION['userID'];
 
-} elseif (isset($_COOKIE['username']) and isset($_COOKIE['password'])) {
-    $username = htmlspecialchars($_COOKIE['username']);
-    $password = htmlspecialchars($_COOKIE['password']);
-    $islogged = User::checkIfValid($username, $password);
+} elseif (Utils::checkCookies('PHPSESSID') and User::$isLogged) {
+    //  $sessionName = session_name();
+    setcookie('PHPSESSID', session_id(), time()+3600*24);
 
-    if($islogged) {
-        setcookie("username",$username, time()+3600*24);
-        setcookie("password",$password,time()+3600*24);  //засунуть в метод
-    }
-} elseif(isset($_POST['username']) and isset($_POST['password'])) {
-    $username = htmlspecialchars($_POST['username']);
+} elseif(Utils::checkPost('username') and Utils::checkPost('password')) {
+    User::$username = htmlspecialchars($_POST['username']);
     $password = htmlspecialchars($_POST['password']);
-    $islogged = User::checkIfValid($username, $password);
-    if(isset($_POST['stay_logged_in']) and $islogged==true) {
-        setcookie("username",$username, time()+3600*24);
-        setcookie("password",$password,time()+3600*24);  //засунуть в метод
+
+    User::$isLogged = User::checkIfValid(User::$username, $password);
+    if(Utils::checkPost('stay_logged_in') and User::$isLogged==true) {
+        //$sessionName = session_name();
+        setcookie('PHPSESSID', session_id(), time()+3600*24); //put in a method
     }
-} else {
-    include 'authorization.php';
 }
-if($islogged) {
-    $_SESSION['username']= $username;
+/**
+ * processing logging in
+ */
+if(User::$isLogged) {
+    $buttons = new Template('ExitButton'); //перенёс кнопку сюда, потому как еслі ошібочно ввесті логін-пароль, то
+    // кнопка не должна появляться
+    $_SESSION['username']= User::$username;
+    $_SESSION['userID'] = User::$userID;
     $_SESSION['islogged'] = true;
-    $p= Template::getPageElement('users',array('USER_PAGES'=>'User individual pages'));
-    if(Utils::isButtonPressed('userpages') OR Utils::checkGet('pageid')) {
-        include 'pages/userpages.php';
-    }
+    $p= new Template('users');
+    $p = $p->processTemplate(array('USER_PAGES'=>'User individual pages'));
+
+    /**
+     * processind changing user's info
+     */
     if(Utils::isButtonPressed('rewrite')) {
         $formID = htmlspecialchars($_POST['id']);
-        $sth=DB::getInstance()->prepare('SELECT `id` FROM `users` WHERE `name`=:name');
-        $sth->execute(array('name'=>$_SESSION['username']));
-        $currentID = $sth->fetch(PDO::FETCH_ASSOC);
-        if($currentID['id'] == $formID) {
+        if(User::$userID == $formID) {
             $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email,
  `about_me`=:about_me WHERE `id`=:id ');
             $arr = array('id'=>$_POST['id'],'name'=>$_POST['name'], 'email'=>$_POST['email'], 'about_me'=>$_POST['about_me']);
             $sth->execute($arr);
         }
     }
+    /**
+     * processing showing list of individual pages
+     */
+    if(Utils::isButtonPressed('userpages') OR Utils::checkGet('pageid')) {
+        include 'pages/userpages.php';
+    }
+    /**
+     * message if username-password does not match
+     */
 } else {
-    $p = Template::getPageElement('formlogin',array('WRONG_LOGIN_MESSAGE'=>'Login/password does not match'));
+    $msgButtons = 'Login-password does not match!';
 }
+
 

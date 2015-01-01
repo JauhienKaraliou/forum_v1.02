@@ -5,6 +5,9 @@ class User {
     private $userData = array();
     private $resp = true;
     private $errors = array();
+    public static $isLogged;
+    public static $username;
+    public static $userID;
 
     public  function __construct(){
         if (isset($_POST['name'])) {
@@ -119,10 +122,15 @@ class User {
     {
         $arr['username'] =$username;
         $arr['password'] = md5($password);
-        $sth = DB::getInstance()->prepare('SELECT `id` FROM `users` WHERE `name`=:username and `password`=:password');
+        $sth = DB::getInstance()->prepare('SELECT `id`,`ustatus_id` FROM `users` WHERE `name`=:username and `password`=:password');
         $sth->execute($arr);
-        $res=($sth->fetchAll())?true:false;
-        return $res;
+        $uInfo = $sth->fetch();
+        if(isset($uInfo['id']) and $uInfo['ustatus_id']!='3') {
+            self::$userID = $uInfo['id'];
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function getAllUsers()

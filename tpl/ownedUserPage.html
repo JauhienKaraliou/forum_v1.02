@@ -1,14 +1,40 @@
-<div class="col-md-6">
+
     <form method="post" enctype="multipart/form-data" class="form-horizontal">
-    <dl class="dl-horizontal">
-        <dt>Name</dt>
-        <dd><input type="text" name="name" class="form-control input-md" value="{{name}}"></dd>
-        <dt>E-mail</dt>
-        <dd><input type="text" name="email" class="form-control input-md" value="{{email}}"></dd>
-        <dt>About</dt>
-        <dd><input type="text" name="about_me" class="form-control input-md" value="{{about_me}}"></dd>
-    </dl>
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Вы можете отредактировать персональные данные</legend>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Ваше имя</label>
+                <div class="col-md-5">
+                    <input type="text" name="name" class="form-control input-md" value="{{name}}">
+                    <p class="help-block" data-name="name"></p>
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Ваш e-mail</label>
+                <div class="col-md-5">
+                    <input type="text" name="email" class="form-control input-md" value="{{email}}" disabled>
+                    <p class="help-block" data-name="name"></p>
+                </div>
+            </div>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Коротко о Вас</label>
+                <div class="col-md-5">
+                    <input type="text" name="about_me" class="form-control input-md" value="{{about_me}}">
+                    <p class="help-block" data-name="name"></p>
+                </div>
+            </div>
         <input type="hidden" name="id" value="{{id}}">
-        <button class="btn btn-warning" type="submit" name="action" value="rewrite">Обновить</button>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="Register"></label>
+                <div class="col-md-4">
+                    <input id="Rewrite" type="submit" name="action" value="Register" class="btn btn-info">
+                </div>
+            </div>
+
+        </fieldset>
     </form>
-</div>

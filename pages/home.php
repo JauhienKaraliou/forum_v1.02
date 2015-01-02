@@ -47,9 +47,10 @@ if(User::$isLogged) {
     if(Utils::isButtonPressed('rewrite')) {
         $formID = htmlspecialchars($_POST['id']);
         if(User::$userID == $formID) {
-            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email,`about_me`=:about_me WHERE `id`=:id ');
-            $arr = array('id'=>$_POST['id'],'name'=>$_POST['name'], 'email'=>$_POST['email'], 'about_me'=>$_POST['about_me']);
+            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `about_me`=:about_me WHERE `id`=:id ');
+            $arr = array('id'=> $_POST['id'],'name'=> $_POST['name'], 'about_me'=>$_POST['about_me']);
             $sth->execute($arr);
+            var_dump($sth -> errorInfo());
         }
         $_SESSION['msg'] = 'Вы успешно обновили данные';
         header('Location: '.BASE_URL);

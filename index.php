@@ -27,11 +27,14 @@ if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::
     include 'pages/home.php';
     //$buttons = new Template('ExitButton');
     //$msgButtons = 'Вы вошли на форум под именем: '. $user -> getUserName();
-} elseif (!empty($_GET['code']) && isset($_GET['code'])){
+}
+if (!empty($_GET['code']) && isset($_GET['code'])){
     include 'pages/activation.php';
 } elseif (isset($_SESSION['msg'])){  //checkSession('msg')?
     $msgButtons = $_SESSION['msg'];
     $_SESSION['msg'] = NULL;
+} elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')){    //переход на страницу авторизации
+    include 'pages/userpages.php';
 } elseif (Utils::isButtonPressed('Register')){    //переход на страницу авторизации
     include 'pages/registration.php';
     $msgButtons = "Введите персональные данные для регистрации";

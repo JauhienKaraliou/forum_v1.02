@@ -3,20 +3,23 @@
 require_once('inc/inc.php');
 
 $page = new Template('page');
-$footer = "&copy Powered by O&J, 2014";
-$pageTitle = 'IT Forum';
-$msg = '';
 $buttons = new Template('LogInOrRegisterButtons');
+$msg = '';
 $msgButtons = '';
+$pageTitle = 'IT Forum';
 $p='Главный контент форума';
+$footer = "&copy Powered by O&J, 2014";
+$user = new User();
+
+var_dump(BASE_URL);
 
 if(Utils::isButtonPressed('Exit')) {
     Utils::logOut();
 }
-
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/home.php';
     $buttons = new Template('ExitButton');
+    $msgButtons = 'Вы вошли на форум под именем: '. $user -> getUserName();
 } elseif (!empty($_GET['code']) && isset($_GET['code'])){
     include 'pages/activation.php';
 } elseif (isset($_SESSION['msg'])){

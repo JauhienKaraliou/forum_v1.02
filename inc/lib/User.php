@@ -41,11 +41,7 @@ class User {
         $email = $db -> prepare('SELECT COUNT(users.id) AS count FROM users WHERE users.email = :email');
         $email->execute(array('email' => $this -> userData['email']));
         $count = $email -> fetch(PDO::FETCH_ASSOC);
-        if ($count['count'] == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return $count['count'];
     }
 
     private function checkCaptchaAnswer($answ){
@@ -68,7 +64,7 @@ class User {
         }
         if (!preg_match('/\A(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])\S{6,}\z/', $this -> userData['password'])) {
             $this -> resp = false;
-            $this -> errors['password'] = 'Пароль должен содержать хотя бы одну большую букву, маленькую букву и цифру';
+            $this -> errors['password'] = 'Пароль должен содержать хотя бы одну большую букву, маленькую букву и цифру и быть не меннее 8 символов';
         }
         if ($this -> userData['password'] !== $this -> userData['passwordrepeat']){
             $this -> resp = false;
@@ -95,6 +91,10 @@ class User {
 
     public function getUserEmail(){
         return $this -> userData['email'];
+    }
+
+    public function getUserName(){
+        return $this -> userData['name'];
     }
 
     public function saveUserData (){

@@ -1,7 +1,6 @@
 <?php
 
     $p = new Template('formRegister');
-    $user = new User();
     if(Utils::isFormRegisterSubmitted()){
         $userData = $user-> getUserDataArray();
         $validateFormResult = $user -> isFormRegisterValid();

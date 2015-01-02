@@ -35,6 +35,7 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
 if(User::$isLogged) {
     $buttons = new Template('ExitButton'); //перенёс кнопку сюда, потому как еслі ошібочно ввесті логін-пароль, то
     // кнопка не должна появляться
+    $msgButtons = 'Вы вошли на форум под именем: '.User::$username;// $user -> getUserName();
     $_SESSION['username']= User::$username;
     $_SESSION['userID'] = User::$userID;
     $_SESSION['uStatusID'] = User::$userStatusID;

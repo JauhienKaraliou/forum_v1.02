@@ -10,10 +10,7 @@ $pageTitle = 'IT Forum';
 $p='Главный контент форума';
 $footer = "&copy Powered by O&J, 2014";
 $user = new User();
-
-var_dump(BASE_URL);
-var_dump($_SESSION);
-
+var_dump($user);
 /**
  * Проверка нажатия кнопки выхода
  */

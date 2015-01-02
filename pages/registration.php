@@ -1,6 +1,9 @@
 <?php
 
     $p = new Template('formRegister');
+var_dump($user);
+$user = new User();
+var_dump($user);
     if(Utils::isFormRegisterSubmitted()){
         $userData = $user-> getUserDataArray();
         $validateFormResult = $user -> isFormRegisterValid();
@@ -13,6 +16,7 @@
                 $body = 'Здравствуйте!<br>Мы должны убедиться в том, что вы человек. Пожалуйста, подтвердите адрес вашей электронной почты, и можете начать использовать ваш аккаунт на сайте.<br><br><a href="'.BASE_URL.'?code='. $activation . '">'. BASE_URL .'?code='.$activation.'</a>';
                 $subject = "Подтверждение электронной почты на IT Форуме";
                 $to = $user -> getUserEmail();
+                $_SESSION['msg'] = 'На ваш почтовый ящик отправлено письмо. Для активации аккаунта, пройдите по ссылке в письме';
                 Utils::sendMail($to, $subject, $body);
                 header('Location: '.$_SERVER['REQUEST_URI']);
                 die;

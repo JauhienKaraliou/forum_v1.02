@@ -16,7 +16,7 @@ define('DB_DSN', 'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8');
 define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME'].':'. $_SERVER['SERVER_PORT'] .$_SERVER['PHP_SELF']);
 define('MAIL_USER', 'sendmailphp@tut.by');
 define('MAIL_PASSWORD', 'OlLis7781070');
-//'http://localhost:81/forum_v1.02/index.php'
+
 
 include_once('inc/lib/PHPMailer/PHPMailerAutoload.php');
 

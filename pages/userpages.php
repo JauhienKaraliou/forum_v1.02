@@ -28,7 +28,7 @@ if (Utils::checkGet('pageid')) {
             $usrpage = new Template('ownedUserPage');
             $p = $usrpage->processTemplate($userInfo);
         } else {
-            $usrpage = new Template('userpages');
+            $usrpage = new Template('userpage');
            $p = $usrpage -> processTemplate($userInfo);
         }
     } else {

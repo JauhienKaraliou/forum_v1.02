@@ -126,12 +126,14 @@ class Utils
 
     public static function logOut()
     {
+        $_SESSION['username']= null;
+        $_SESSION['userID'] = null;
+        $_SESSION['uStatusID'] = null;
         $_SESSION['islogged']=null;
-        $_SESSION['username']=null;
-        $_COOKIE['username']=null;
-        $_COOKIE['password']=null;
-        setcookie("username",'',time()-3600*25);
-        setcookie("password",'',time()-3600*25);
+        $_SESSION['PHPSESSID']=null;
+
+        $_COOKIE['PHPSESSID']=null;
+        setcookie("PHPSESSID",null,time()-3600*25);
         return true;
     }
 }

@@ -35,12 +35,11 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
 if(User::$isLogged) {
     $buttons = new Template('ExitButton'); //перенёс кнопку сюда, потому как еслі ошібочно ввесті логін-пароль, то
     // кнопка не должна появляться
+    $msgButtons = 'Вы вошли на форум под именем: '.User::$username;// $user -> getUserName();
     $_SESSION['username']= User::$username;
     $_SESSION['userID'] = User::$userID;
     $_SESSION['uStatusID'] = User::$userStatusID;
     $_SESSION['islogged'] = true;
-    $p= new Template('users');
-    $p = $p->processTemplate(array('USER_PAGES'=>'User individual pages'));
 
     /**
      * processind changing user's info
@@ -53,12 +52,6 @@ if(User::$isLogged) {
             $arr = array('id'=>$_POST['id'],'name'=>$_POST['name'], 'email'=>$_POST['email'], 'about_me'=>$_POST['about_me']);
             $sth->execute($arr);
         }
-    }
-    /**
-     * processing showing list of individual pages
-     */
-    if(Utils::isButtonPressed('userpages') OR Utils::checkGet('pageid')) {
-        include 'pages/userpages.php';
     }
     /**
      * message if username-password does not match

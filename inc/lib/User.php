@@ -119,6 +119,13 @@ class User {
         }
     }
 
+    public function getUserStatus(){
+        $res = DB::getInstance()->prepare('SELECT `users`.`ustatus_id` AS userStatus FROM `users` WHERE `users`.`email`=:email');
+        $res -> execute(array('email' =>  $this -> userData['email']));
+        $userIdArr = $res ->fetch(PDO::FETCH_ASSOC);
+        return (int) $userIdArr['userStatus'];;
+    }
+
     public static function checkIfValid($username, $password)
     {
         $arr['username'] =$username;

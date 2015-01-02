@@ -22,3 +22,7 @@ p.help-block {
     margin-bottom: 5px;
 }
 
+dd {
+    text-align: left;
+}
+

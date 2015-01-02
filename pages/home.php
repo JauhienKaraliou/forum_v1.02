@@ -57,7 +57,7 @@ if(User::$isLogged) {
      * message if username-password does not match
      */
 } else {
-    $msgButtons = 'Login-password does not match!';
+    $_SESSION['msg'] = 'Login-password does not match!';
     header('Location: '.BASE_URL);
 }
 

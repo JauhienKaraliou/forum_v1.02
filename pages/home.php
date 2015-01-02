@@ -44,7 +44,7 @@ if(User::$isLogged) {
     /**
      * processind changing user's info
      */
-    if(Utils::isButtonPressed('rewrite')) {
+    if(Utils::isButtonPressed('Update')) {
         $formID = htmlspecialchars($_POST['id']);
         if(User::$userID == $formID) {
             $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `about_me`=:about_me WHERE `id`=:id ');

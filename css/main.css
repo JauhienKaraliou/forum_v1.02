@@ -22,7 +22,10 @@ p.help-block {
     margin-bottom: 5px;
 }
 
-dd {
-    text-align: left;
+td:first-child{
+    font-weight: bold;
+}
+td:last-child{
+    font-style: italic;
 }
 

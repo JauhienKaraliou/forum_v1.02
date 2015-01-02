@@ -25,8 +25,8 @@ if(Utils::isButtonPressed('Exit')) {
  */
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/home.php';
-    $buttons = new Template('ExitButton');
-    $msgButtons = 'Вы вошли на форум под именем: '. $user -> getUserName();
+    //$buttons = new Template('ExitButton');
+    //$msgButtons = 'Вы вошли на форум под именем: '. $user -> getUserName();
 } elseif (!empty($_GET['code']) && isset($_GET['code'])){
     include 'pages/activation.php';
 } elseif (isset($_SESSION['msg'])){  //checkSession('msg')?

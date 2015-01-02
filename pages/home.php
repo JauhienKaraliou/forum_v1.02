@@ -58,6 +58,7 @@ if(User::$isLogged) {
      */
 } else {
     $msgButtons = 'Login-password does not match!';
+    header('Location: '.BASE_URL);
 }
 
 

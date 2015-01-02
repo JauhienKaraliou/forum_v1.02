@@ -12,38 +12,40 @@ $footer = "&copy Powered by O&J, 2014";
 $user = new User();
 
 var_dump(BASE_URL);
+var_dump($_SESSION);
 
 /**
- * проберяем была ли нажата кнопка выхода
+ * Проверка нажатия кнопки выхода
  */
 if(Utils::isButtonPressed('Exit')) {
     Utils::logOut();
 }
 
 /**
- * проверяем есть ли какие-нибудь данныхе в переменных окружения для авторизации
+ * Проверка залогинен ли пользователь
  */
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/home.php';
-    //$buttons = new Template('ExitButton');
-    //$msgButtons = 'Вы вошли на форум под именем: '. $user -> getUserName();
+} else {
+    $msgButtons = "Вы не аторизованы, поэтому не можете оставлять комментарии.<br>Пожалуйста, авторизируйтесь или зарегистрируйтесь";
 }
 if (!empty($_GET['code']) && isset($_GET['code'])){
     include 'pages/activation.php';
-} elseif (isset($_SESSION['msg'])){  //checkSession('msg')?
+} elseif (isset($_SESSION['msg'])){
     $msgButtons = $_SESSION['msg'];
     $_SESSION['msg'] = NULL;
-} elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')){    //переход на страницу авторизации
+} elseif (Utils::isButtonPressed('Users') AND Utils::checkGet('pageid')){
+    header('Location: '.BASE_URL);
+    die();
+} elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')){
     include 'pages/userpages.php';
-} elseif (Utils::isButtonPressed('Register')){    //переход на страницу авторизации
+}  elseif (Utils::isButtonPressed('Register')){
     include 'pages/registration.php';
     $msgButtons = "Введите персональные данные для регистрации";
-} elseif (Utils::isButtonPressed('Login')){     //переход на страницу авторизации
+} elseif (Utils::isButtonPressed('Login')){
     $p = new Template('formlogin');
     $p = $p->processTemplate(array('WRONG_LOGIN_MESSAGE'=>''));
     $msgButtons = "Введите свой логин и пароль";
-} else {
-    $msgButtons = "Вы не аторизованы, поэтому не можете оставлять комментарии.<br>Пожалуйста, авторизируйтесь или зарегистрируйтесь";
 }
 
 $page = $page -> processTemplate(array(
@@ -56,10 +58,3 @@ $page = $page -> processTemplate(array(
 ));
 
 echo $page;
-
-/*проверку на активацию аккаунта внёс в метод User->checkIfValid()
-/проверку на активацию аккаунта внёс в метод User->checkIfValid()
--добавил проверку активированного пользователя
--поведение при изменении данных стало логичнее
--к ИД статуса юзера теперь можно обращаться через статическое свойство класса юзер
-*/

@@ -17,12 +17,10 @@ if (Utils::isButtonPressed('Users')) {
     $p .= '</table>';
 }
 if (Utils::checkGet('pageid')) {
-    var_dump($_GET);
     $id= htmlspecialchars($_GET['pageid']);
     $sth = DB::getInstance()->prepare('SELECT `id`,`name`,`email`,`about_me` FROM `users` WHERE `id`= :id');
     $sth->execute(array('id'=>$id));
     $userInfo = $sth->fetch(PDO::FETCH_ASSOC);
-    var_dump($userInfo);
     if($userInfo == true) {
         if($userInfo['name'] == $_SESSION['username']) {
             $usrpage = new Template('ownedUserPage');

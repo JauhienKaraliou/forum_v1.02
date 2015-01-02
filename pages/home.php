@@ -47,18 +47,21 @@ if(User::$isLogged) {
     if(Utils::isButtonPressed('rewrite')) {
         $formID = htmlspecialchars($_POST['id']);
         if(User::$userID == $formID) {
-            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email,
- `about_me`=:about_me WHERE `id`=:id ');
+            $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `email`=:email,`about_me`=:about_me WHERE `id`=:id ');
             $arr = array('id'=>$_POST['id'],'name'=>$_POST['name'], 'email'=>$_POST['email'], 'about_me'=>$_POST['about_me']);
             $sth->execute($arr);
         }
+        $_SESSION['msg'] = 'Вы успешно обновили данные';
+        header('Location: '.BASE_URL);
+        die();
     }
     /**
      * message if username-password does not match
      */
 } else {
-    $_SESSION['msg'] = 'Login-password does not match!';
+    $_SESSION['msg'] = 'Логин и пароль не совпадают! Попробуйте снова!';
     header('Location: '.BASE_URL);
+    die();
 }
 
 

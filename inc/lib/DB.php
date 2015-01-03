@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ALEX
- * Date: 27.12.2014
- * Time: 1:27
- */
+
 class DB extends PDO{
 
     protected static $_instance;
 
     /**
-     *  тут  я попробовал завернуть в try-catch так должны ловиться ошибки подключения
      * @param string $dsn
      * @param string $username
      * @param string $password

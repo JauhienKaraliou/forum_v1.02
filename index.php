@@ -11,7 +11,6 @@ $p='Главный контент форума';
 $footer = "&copy Powered by O&J, 2014";
 $user = new User();
 
-//var_dump(BASE_URL);
 
 /**
  * проберяем была ли нажата кнопка выхода
@@ -25,8 +24,7 @@ if(Utils::isButtonPressed('Exit')) {
  */
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/home.php';
-    //$buttons = new Template('ExitButton');
-    //$msgButtons = 'Вы вошли на форум под именем: '. $user -> getUserName();
+
 } elseif (!empty($_GET['code']) && isset($_GET['code'])){
     include 'pages/activation.php';
 } elseif (isset($_SESSION['msg'])){  //checkSession('msg')?
@@ -44,7 +42,7 @@ if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::
 }
 
 $page = $page -> processTemplate(array(
-    'FORM' => $p,
+    'CONTENT' => $p,
     'MSG' => $msg,
     'FOOTER' => $footer,
     'PAGE_TITLE' => $pageTitle,
@@ -54,9 +52,4 @@ $page = $page -> processTemplate(array(
 
 echo $page;
 
-/*проверку на активацию аккаунта внёс в метод User->checkIfValid()
-/проверку на активацию аккаунта внёс в метод User->checkIfValid()
--добавил проверку активированного пользователя
--поведение при изменении данных стало логичнее
--к ИД статуса юзера теперь можно обращаться через статическое свойство класса юзер
-*/
+

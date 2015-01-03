@@ -6,9 +6,6 @@
  * Time: 21.08
  */
 
-
-
-
 if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::checkSession('username')) {
     User::$isLogged = true;
     User::$username = $_SESSION['username'];

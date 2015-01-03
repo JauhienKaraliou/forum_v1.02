@@ -7,7 +7,7 @@
  */
 
 
-//User::$isLogged=false; // обнуление переменной
+
 
 if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::checkSession('username')) {
     User::$isLogged = true;

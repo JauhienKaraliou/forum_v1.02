@@ -22,7 +22,7 @@ if (Utils::checkGet('pageid')) {
     $sth->execute(array('id'=>$id));
     $userInfo = $sth->fetch(PDO::FETCH_ASSOC);
     if($userInfo == true) {
-        if($userInfo['name'] == $_SESSION['username']) {
+        if($userInfo['name'] == User::$username) {
             $usrpage = new Template('ownedUserPage');
             $p = $usrpage->processTemplate($userInfo);
         } else {

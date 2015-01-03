@@ -70,8 +70,8 @@ class Utils
         $mail->SMTPAuth      = true;
         $mail->SMTPKeepAlive = true;
         $mail->SMTPSecure = "ssl";
-        $mail->Host          = 'smtp.gmail.com';
-        $mail->Port          = 465;
+        $mail->Host          = 'mx1.hostinger.ru';
+        $mail->Port          = 2525;
         $mail->Username      = MAIL_USER;
         $mail->Password      = MAIL_PASSWORD;
         $mail->SetFrom(MAIL_USER);
@@ -85,11 +85,18 @@ class Utils
 
     public static function checkActivationCode($code){
         $db = DB::getInstance();
-        $idUser = $db -> prepare('SELECT `users`.`id`,`users`.`ustatus_id` AS status FROM `users` WHERE `users`.`activation` = :code');
+        $idUser = $db -> prepare('
+SELECT `users`.`id`,`users`.`ustatus_id`
+AS status
+FROM `users`
+WHERE `users`.`activation` = :code');
         if($idUser -> execute(array('code' => $code))){
             $data = $idUser -> fetchAll(PDO::FETCH_ASSOC);
             if($data[0]['status'] == 3 and count ($data) == 1){
-                $result = $db -> prepare('UPDATE `users` SET `users`.`ustatus_id` = :user WHERE `users`.`activation` = :code');
+                $result = $db -> prepare('
+UPDATE `users`
+SET `users`.`ustatus_id` = :user
+WHERE `users`.`activation` = :code');
                 $result -> execute(array('user' => 2, 'code' => $code));
                 return $_SESSION['msg'] = 'Ваш аккаунт активирован. Теперь вы можете авторизоваться на форуме';
             }elseif ($data[0]['status'] == 2){
@@ -131,7 +138,6 @@ class Utils
         $_SESSION['uStatusID'] = null;
         $_SESSION['islogged']=null;
         $_SESSION['PHPSESSID']=null;
-
         $_COOKIE['PHPSESSID']=null;
         setcookie("PHPSESSID",null,time()-3600*25);
         header('Location: '.BASE_URL);
@@ -139,7 +145,9 @@ class Utils
     }
 
     public static  function saveCategory(){
-        $categoryDataToSave = DB::getInstance() -> prepare('INSERT INTO categories (name, description, user_id) VALUES (:name, :description, :user_id)');
+        $categoryDataToSave = DB::getInstance() -> prepare('
+INSERT INTO categories (name, description, user_id)
+VALUES (:name, :description, :user_id)');
 
         if($categoryDataToSave->execute(array(
             'name' => $_POST['catName'],
@@ -153,7 +161,9 @@ class Utils
     }
 
     public static  function saveTheme(){
-        $themeDataToSave = DB::getInstance() -> prepare('INSERT INTO themes (name, category_id, user_id) VALUES (:name, :category_id, :user_id)');
+        $themeDataToSave = DB::getInstance() -> prepare('
+INSERT INTO themes (name, category_id, user_id)
+ VALUES (:name, :category_id, :user_id)');
 
         if($themeDataToSave->execute(array(
             'name' => $_POST['themeName'],

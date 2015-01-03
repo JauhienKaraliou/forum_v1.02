@@ -9,13 +9,13 @@ define('TPL_DIR', 'tpl');
 define('PAGE_MES', 5);
 define('CLS_DIR', 'lib');
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASSWORD', '1276547');
+define('DB_USER', 'forum');
+define('DB_PASSWORD', '');
 define('DB_NAME', 'forum');
 define('DB_DSN', 'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8');
 define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME'].':'. $_SERVER['SERVER_PORT'] .$_SERVER['PHP_SELF']);
-define('MAIL_USER', 'sendmailphp@tut.by');
-define('MAIL_PASSWORD', 'OlLis7781070');
+define('MAIL_USER', 'admin@jauhien-guestbook.wc.lt');
+define('MAIL_PASSWORD', '');
 
 
 include_once('inc/lib/PHPMailer/PHPMailerAutoload.php');

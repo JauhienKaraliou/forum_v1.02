@@ -20,12 +20,18 @@ require_once('inc/inc.php');
 + * форму для добавления сообщения сделала formAddMessage.html
 + */
 
+/**
+ * проберяем была ли нажата кнопка выхода
+ */
+if(Utils::isButtonPressed('Exit')) {
+    Utils::logOut();
+}
+
 $page = new Template('page');
 $buttons = new Template('LogInOrRegisterButtons');
 $msg = '';
 $msgButtons = '';
 $pageTitle = 'IT Forum';
-//$p='Главный контент форума';
 $footer = "&copy Powered by O&J, 2014";
 $user = new User();
 $categories = Utils::getAllCategories();
@@ -35,74 +41,49 @@ if(empty($categories)){
     $p=Utils::getHtmlListOfCategories($categories);
 }
 
-/**
- * проберяем была ли нажата кнопка выхода
- */
-if(Utils::isButtonPressed('Exit')) {
-    Utils::logOut();
-}
+
+include 'pages/categories.php';
 
 /**
  * проверяем есть ли какие-нибудь данныхе в переменных окружения для авторизации
  */
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/home.php';
-
 } else {
 $msgButtons = "Вы не аторизованы, поэтому не можете оставлять комментарии.<br>Пожалуйста, авторизируйтесь или зарегистрируйтесь";
-
 }
+
 
 if (!empty($_GET['code']) && isset($_GET['code'])) {
     include 'pages/activation.php';
 } elseif (isset($_SESSION['msg'])) {  //checkSession('msg')?
     $msgButtons = $_SESSION['msg'];
     $_SESSION['msg'] = NULL;
+
 } elseif (Utils::isButtonPressed('Users') AND Utils::checkGet('pageid')) {
+
     header('Location: '.BASE_URL);
-    die();
-} elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')){
     include 'pages/userpages.php';
+
+    //die();
+    } elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')) {
+        include 'pages/userpages.php';
+
+/*
+} elseif (Utils::isButtonPressed('Users')) {
+    include 'pages/userpages.php';
+*/
 } elseif (Utils::isButtonPressed('Register')) {    //переход на страницу авторизации
     include 'pages/registration.php';
+
     $msgButtons = "Введите персональные данные для регистрации";
 } elseif (Utils::isButtonPressed('Login')) {     //переход на страницу авторизации
     $p = new Template('formlogin');
+
     $p = $p->processTemplate(array('WRONG_LOGIN_MESSAGE'=>''));
     $msgButtons = "Введите свой логин и пароль";
-} elseif (Utils::isButtonPressed('Create') AND Utils::checkPost('catName')){
-    if(Utils::saveCategory()) {
-        $_SESSION['msg'] = 'Категория успешно добавлена';
-        header('Location: '.BASE_URL);
-        die();
-    } else {
-        $_SESSION['msg'] = 'Произошла ошибка при сохранении категории';
-        header('Location: '.BASE_URL);
-        die();
-    }
-} elseif (Utils::isButtonPressed('Create') AND empty($_GET)) {
-    $p = new Template('formAddCategory');
-} elseif (Utils::isButtonPressed('Create') AND Utils::checkGet('cat_id') AND Utils::checkPost('themeName')){
-    if(Utils::saveTheme()){
-        $_SESSION['msg'] = 'Тема успешно добавлена';
-        header('Location: '.$_SERVER['REQUEST_URI']);
-        die();
-    } else {
-        $_SESSION['msg'] = 'Произошла ошибка при сохранении темы';
-        header('Location: '.$_SERVER['REQUEST_URI']);
-        die();
-    }
-} elseif (Utils::isButtonPressed('Create') AND Utils::checkGet('cat_id')){
-    $p = new Template('formAddTheme');
-} elseif (Utils::checkGet('cat_id')){
-    $themes = Utils::getThemesByIdOfCategory($_GET['cat_id']);
-    if (empty($themes)){
-        $p = 'В данной категории пока еще нет ни одной темы. Вы можете создать свою';
-        $p .= new Template('formAddTheme');
-    } else {
-        $p = Utils::getHtmlListOfThemes($themes);
-    }
 }
+
 
 $page = $page -> processTemplate(array(
     'CONTENT' => $p,

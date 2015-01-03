@@ -70,8 +70,9 @@ class Utils
         $mail->SMTPAuth      = true;
         $mail->SMTPKeepAlive = true;
         $mail->SMTPSecure = "ssl";
-        $mail->Host          = 'mx1.hostinger.ru';
-        $mail->Port          = 2525;
+        //$mail->Host          = 'mx1.hostinger.ru';
+        $mail->Host          = 'smtp.gmail.com';
+        $mail->Port          = 465;
         $mail->Username      = MAIL_USER;
         $mail->Password      = MAIL_PASSWORD;
         $mail->SetFrom(MAIL_USER);
@@ -145,10 +146,7 @@ WHERE `users`.`activation` = :code');
     }
 
     public static  function saveCategory(){
-        $categoryDataToSave = DB::getInstance() -> prepare('
-INSERT INTO categories (name, description, user_id)
-VALUES (:name, :description, :user_id)');
-
+        $categoryDataToSave = DB::getInstance() -> prepare('INSERT INTO categories (name, description, user_id) VALUES (:name, :description, :user_id)');
         if($categoryDataToSave->execute(array(
             'name' => $_POST['catName'],
             'description' => $_POST['catDescription'],
@@ -161,10 +159,7 @@ VALUES (:name, :description, :user_id)');
     }
 
     public static  function saveTheme(){
-        $themeDataToSave = DB::getInstance() -> prepare('
-INSERT INTO themes (name, category_id, user_id)
- VALUES (:name, :category_id, :user_id)');
-
+        $themeDataToSave = DB::getInstance() -> prepare('INSERT INTO themes (name, category_id, user_id) VALUES (:name, :category_id, :user_id)');
         if($themeDataToSave->execute(array(
             'name' => $_POST['themeName'],
             'category_id' => $_GET['cat_id'],

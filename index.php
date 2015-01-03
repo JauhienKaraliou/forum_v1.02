@@ -1,25 +1,6 @@
 <?php
 
 require_once('inc/inc.php');
-/*Большой коммент :)
-+перед тем как тестировать в базе сделай у себя права администратора, т.е. статус юзера поставь 1
-+у пользователя когда тот находится внутри категории тоже появляется кнопка создать, которая вызывает форму для внесения новой темы
-+ * Что касается статических полей в классе юзер, оставляй как есть, честно говоря даже не знаю, как это все
-+ * переделывать тогда, вообщем мне кажется много чего переписывать нужно было бы,
-+ * а я уже разобралась с этим и буду их использовать, вообщем не парься по этому поводу, оставляй как есть.
-+ *
-+ * Еще чутка базу обновила в таблицу категория добавила поле Description
-+ * дамп обновила
-+ *
-+ * остановилась на темах, т.е. они добавляются вроде и выводятся когда кликаешь на категорию,
-+ * но вот когда кликаешь на тему, почемуто корявый адрес получается
-+ * типа такого http://localhost:81/forum_v1.02/index.php?cat_id=5&theme_id%20=1
-+ * отчего эти знаки процентов и 20 не знаю берутся
-+ *
-+ * ой намутила я чего-то не знаю как разберешься :)
-+ * форму для добавления сообщения сделала formAddMessage.html
-+ */
-
 /**
  * проберяем была ли нажата кнопка выхода
  */
@@ -59,27 +40,18 @@ if (!empty($_GET['code']) && isset($_GET['code'])) {
 } elseif (isset($_SESSION['msg'])) {  //checkSession('msg')?
     $msgButtons = $_SESSION['msg'];
     $_SESSION['msg'] = NULL;
-
 } elseif (Utils::isButtonPressed('Users') AND Utils::checkGet('pageid')) {
-
     header('Location: '.BASE_URL);
-    include 'pages/userpages.php';
-
-    //die();
-    } elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')) {
+    die();
+} elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')) {
         include 'pages/userpages.php';
-
-/*
 } elseif (Utils::isButtonPressed('Users')) {
     include 'pages/userpages.php';
-*/
-} elseif (Utils::isButtonPressed('Register')) {    //переход на страницу авторизации
+} elseif (Utils::isButtonPressed('Register')) {
     include 'pages/registration.php';
-
     $msgButtons = "Введите персональные данные для регистрации";
-} elseif (Utils::isButtonPressed('Login')) {     //переход на страницу авторизации
+} elseif (Utils::isButtonPressed('Login')) {  
     $p = new Template('formlogin');
-
     $p = $p->processTemplate(array('WRONG_LOGIN_MESSAGE'=>''));
     $msgButtons = "Введите свой логин и пароль";
 }

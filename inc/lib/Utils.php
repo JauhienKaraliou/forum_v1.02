@@ -134,6 +134,74 @@ class Utils
 
         $_COOKIE['PHPSESSID']=null;
         setcookie("PHPSESSID",null,time()-3600*25);
-        return true;
+        header('Location: '.BASE_URL);
+        die();
+    }
+
+    public static  function saveCategory(){
+        $categoryDataToSave = DB::getInstance() -> prepare('INSERT INTO categories (name, description, user_id) VALUES (:name, :description, :user_id)');
+
+        if($categoryDataToSave->execute(array(
+            'name' => $_POST['catName'],
+            'description' => $_POST['catDescription'],
+            'user_id' => User::$userID
+        ))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static  function saveTheme(){
+        $themeDataToSave = DB::getInstance() -> prepare('INSERT INTO themes (name, category_id, user_id) VALUES (:name, :category_id, :user_id)');
+
+        if($themeDataToSave->execute(array(
+            'name' => $_POST['themeName'],
+            'category_id' => $_GET['cat_id'],
+            'user_id' => User::$userID
+        ))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getAllCategories(){
+        $categories = DB::getInstance()->prepare('SELECT id, name, description FROM `categories`');
+        $categories->execute();
+        return $categories->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getHtmlListOfCategories(array $data = array()){
+        $p = '';
+        foreach($data as $row){
+            $catTpl = new Template('itemOfCategory');
+            $p .= $catTpl->processTemplate(array(
+                'CAT_ID' => $row['id'],
+                'CAT_NAME' => $row['name'],
+                'CAT_DESCRIPTION' => $row['description']
+            ));
+        }
+        return $p;
+    }
+
+    public static function getThemesByIdOfCategory($id){
+        $themes = DB::getInstance()->prepare('SELECT id, name  FROM `themes` WHERE `themes`.`category_id` = :id');
+        $themes -> execute(array('id' => $id));
+        return $themes->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getHtmlListOfThemes(array $data = array()){
+        $p = '';
+        foreach($data as $row){
+            $themeTpl = new Template('itemOfTheme');
+            $id = (int) $row['id'];
+            $p .= $themeTpl->processTemplate(array(
+                'THEME_ID' => $id,
+                'THEME_NAME' => $row['name'],
+                'CAT_ID' => $_GET['cat_id'],
+            ));
+        }
+        return $p;
     }
 }

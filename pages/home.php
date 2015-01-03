@@ -33,9 +33,18 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
  * processing logging in
  */
 if(User::$isLogged) {
-    $buttons = new Template('ExitButton'); //перенёс кнопку сюда, потому как еслі ошібочно ввесті логін-пароль, то
-    // кнопка не должна появляться
-    $msgButtons = 'Вы вошли на форум под именем: '.User::$username;// $user -> getUserName();
+    $user = new User();
+    $buttons = new Template('ExitButton');
+    if (User::$userStatusID == 1){
+        $buttons .= new Template('CreateButton');
+        $uStatus = 'Администратора';
+    } elseif (User::$userStatusID == 2 AND Utils::checkGet('cat_id')){
+        $buttons .= new Template('CreateButton');
+        $uStatus = 'пользователя';
+    } else {
+        $uStatus = 'пользователя';
+    }
+    $msgButtons = 'Вы вошли на форум под именем: '.User::$username . "<br> в качестве ". $uStatus;
     $_SESSION['username']= User::$username;
     $_SESSION['userID'] = User::$userID;
     $_SESSION['uStatusID'] = User::$userStatusID;
@@ -50,12 +59,12 @@ if(User::$isLogged) {
             $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `about_me`=:about_me WHERE `id`=:id ');
             $arr = array('id'=> $_POST['id'],'name'=> $_POST['name'], 'about_me'=>$_POST['about_me']);
             $sth->execute($arr);
-            var_dump($sth -> errorInfo());
         }
         $_SESSION['msg'] = 'Вы успешно обновили данные';
         header('Location: '.BASE_URL);
         die();
     }
+
     /**
      * message if username-password does not match
      */

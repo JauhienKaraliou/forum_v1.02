@@ -8,7 +8,7 @@ class User {
     public static $isLogged;
     public static $username;
     public static $userID;
-    public static $userStatusID;  //наверное это всё надо засовывать в массив, а то разросся
+    public static $userStatusID;
 
     public  function __construct(){
         if (isset($_POST['name'])) {
@@ -117,13 +117,6 @@ class User {
         } else {
             return false;
         }
-    }
-
-    public function getUserStatus(){
-        $res = DB::getInstance()->prepare('SELECT `users`.`ustatus_id` AS userStatus FROM `users` WHERE `users`.`email`=:email');
-        $res -> execute(array('email' =>  $this -> userData['email']));
-        $userIdArr = $res ->fetch(PDO::FETCH_ASSOC);
-        return (int) $userIdArr['userStatus'];;
     }
 
     public static function checkIfValid($username, $password)

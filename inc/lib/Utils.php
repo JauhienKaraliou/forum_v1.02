@@ -146,7 +146,10 @@ WHERE `users`.`activation` = :code');
     }
 
     public static  function saveCategory(){
-        $categoryDataToSave = DB::getInstance() -> prepare('INSERT INTO categories (name, description, user_id) VALUES (:name, :description, :user_id)');
+        $categoryDataToSave = DB::getInstance() -> prepare('
+INSERT INTO categories (name, description, user_id)
+VALUES (:name, :description, :user_id)');
+
         if($categoryDataToSave->execute(array(
             'name' => $_POST['catName'],
             'description' => $_POST['catDescription'],
@@ -159,7 +162,10 @@ WHERE `users`.`activation` = :code');
     }
 
     public static  function saveTheme(){
-        $themeDataToSave = DB::getInstance() -> prepare('INSERT INTO themes (name, category_id, user_id) VALUES (:name, :category_id, :user_id)');
+        $themeDataToSave = DB::getInstance() -> prepare('
+INSERT INTO themes (name, category_id, user_id)
+ VALUES (:name, :category_id, :user_id)');
+
         if($themeDataToSave->execute(array(
             'name' => $_POST['themeName'],
             'category_id' => $_GET['cat_id'],

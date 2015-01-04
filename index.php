@@ -50,7 +50,7 @@ if (!empty($_GET['code']) && isset($_GET['code'])) {
 } elseif (Utils::isButtonPressed('Register')) {
     include 'pages/registration.php';
     $msgButtons = "Введите персональные данные для регистрации";
-} elseif (Utils::isButtonPressed('Login')) {  
+} elseif (Utils::isButtonPressed('Login')) {
     $p = new Template('formlogin');
     $p = $p->processTemplate(array('WRONG_LOGIN_MESSAGE'=>''));
     $msgButtons = "Введите свой логин и пароль";

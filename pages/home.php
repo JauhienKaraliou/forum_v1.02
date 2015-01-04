@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jauhien
- * Date: 28.12.14
- * Time: 21.08
- */
 
 if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::checkSession('username')) {
     User::$isLogged = true;
@@ -26,17 +20,22 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
         setcookie('PHPSESSID', session_id(), time()+3600*24); //put in a method
     }
 }
-/**
- * processing logging in
- */
+
 if(User::$isLogged) {
     $user = new User();
-    $buttons = new Template('ExitButton');
-    if (User::$userStatusID == 1){
-        $buttons .= new Template('CreateButton');
+    $buttons = new Template('ButtonsExitAndUsers');
+    if (User::$userStatusID == 1 AND !Utils::checkGet('cat_id')){
+        $buttons .= new Template('ButtonCreateCategory');
+        $uStatus = 'Администратора';
+    } elseif (User::$userStatusID == 1 AND Utils::checkGet('cat_id')){
+        $url = Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'action' => 'Newtheme'));
+        $button = new Template('ButtonCreateTheme');
+        $buttons .= $button -> processTemplate(array('URL' => $url));
         $uStatus = 'Администратора';
     } elseif (User::$userStatusID == 2 AND Utils::checkGet('cat_id')){
-        $buttons .= new Template('CreateButton');
+        $url = Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'action' => 'Newtheme'));
+        $button = new Template('ButtonCreateTheme');
+        $buttons .= $button -> processTemplate(array('URL' => $url));
         $uStatus = 'пользователя';
     } else {
         $uStatus = 'пользователя';
@@ -47,9 +46,6 @@ if(User::$isLogged) {
     $_SESSION['uStatusID'] = User::$userStatusID;
     $_SESSION['islogged'] = true;
 
-    /**
-     * processind changing user's info
-     */
     if(Utils::isButtonPressed('Update')) {
         $formID = htmlspecialchars($_POST['id']);
         if(User::$userID == $formID) {
@@ -57,18 +53,13 @@ if(User::$isLogged) {
             $arr = array('id'=> $_POST['id'],'name'=> $_POST['name'], 'about_me'=>$_POST['about_me']);
             $sth->execute($arr);
         }
-        $_SESSION['msg'] = 'Вы успешно обновили данные';
-        header('Location: '.BASE_URL);
-        die();
+        $_SESSION['msg'] = 'Вы успешно обновили персональные данные';
+        Utils::redirect(BASE_URL);
     }
 
-    /**
-     * message if username-password does not match
-     */
 } else {
     $_SESSION['msg'] = 'Логин и пароль не совпадают! Попробуйте снова!';
-    header('Location: '.BASE_URL);
-    die();
+    Utils::redirect(BASE_URL);
 }
 
 

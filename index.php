@@ -1,62 +1,52 @@
 <?php
 
 require_once('inc/inc.php');
-/**
- * проберяем была ли нажата кнопка выхода
- */
-if(Utils::isButtonPressed('Exit')) {
-    Utils::logOut();
-}
 
 $page = new Template('page');
-$buttons = new Template('LogInOrRegisterButtons');
+$buttons = new Template('ButtonsLoginAndRegister');
+$user = new User();
 $msg = '';
 $msgButtons = '';
 $pageTitle = 'IT Forum';
 $footer = "&copy Powered by O&J, 2014";
-$user = new User();
+
+//Формирование основного контента главрной страницы
 $categories = Utils::getAllCategories();
 if(empty($categories)){
     $p = 'Пока нет ни одной категории';
 }else{
-    $p=Utils::getHtmlListOfCategories($categories);
+    $p = Utils::getHtmlListOfCategories($categories);
 }
 
-
-include 'pages/categories.php';
-
-/**
- * проверяем есть ли какие-нибудь данныхе в переменных окружения для авторизации
- */
-if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
-    include 'pages/home.php';
+//Динамическое подключение нужных страниц
+//Все страницы такого типа содержат переменную $p, содержащую основной контент страницы
+$action = isset($_GET['action'])?$_GET['action']:'default';
+if (!file_exists('pages/'.$action.'.php')){
+    $action = 'default';
 } else {
-$msgButtons = "Вы не аторизованы, поэтому не можете оставлять комментарии.<br>Пожалуйста, авторизируйтесь или зарегистрируйтесь";
+    include 'pages/' . $action . '.php';
+}
+//Проверка, авторизован ли пользователь
+if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
+    include 'pages/Home.php';
+} else {
+    $msgButtons = "Вы не аторизованы, поэтому не можете оставлять комментарии.<br>Пожалуйста, авторизируйтесь или зарегистрируйтесь";
 }
 
-
-if (!empty($_GET['code']) && isset($_GET['code'])) {
-    include 'pages/activation.php';
-} elseif (isset($_SESSION['msg'])) {  //checkSession('msg')?
+//Нужно ли передать пользователю какое-либо сообщение
+if (isset($_SESSION['msg'])) {
     $msgButtons = $_SESSION['msg'];
     $_SESSION['msg'] = NULL;
-} elseif (Utils::isButtonPressed('Users') AND Utils::checkGet('pageid')) {
-    header('Location: '.BASE_URL);
-    die();
-} elseif (Utils::isButtonPressed('Users') OR Utils::checkGet('pageid')) {
-        include 'pages/userpages.php';
-} elseif (Utils::isButtonPressed('Users')) {
-    include 'pages/userpages.php';
-} elseif (Utils::isButtonPressed('Register')) {
-    include 'pages/registration.php';
-    $msgButtons = "Введите персональные данные для регистрации";
-} elseif (Utils::isButtonPressed('Login')) {
-    $p = new Template('formlogin');
-    $p = $p->processTemplate(array('WRONG_LOGIN_MESSAGE'=>''));
-    $msgButtons = "Введите свой логин и пароль";
 }
-
-
+//Обработка нажатия кнопки Create
+elseif (Utils::isButtonPressed('Create')){
+    include 'pages/ProcessingPressingCreate.php';
+}
+//Обработка суперглобального массива GET
+if (isset($_GET)){
+    include 'pages/ProcessingGET.php';
+}
+//Формирование страницы
 $page = $page -> processTemplate(array(
     'CONTENT' => $p,
     'MSG' => $msg,

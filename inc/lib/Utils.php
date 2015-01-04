@@ -48,6 +48,22 @@ class Utils
         return $a . ' ' . $marker . ' ' . $b;
     }
 
+    public static function redirect($str){
+        header('Location: '.$str);
+        die();
+    }
+
+    public static function getUrl(array $data = array()){
+        $url = BASE_URL;
+        if(!empty($data)) {
+            $url .= '?';
+            foreach ($data as $key => $value) {
+                $url .= $key.'='.$value.'&';
+            }
+        }
+        return rtrim($url, '&');
+    }
+
     /**
      * Выполняет подстановки данных в переданный шаблон
      * @param $tpl string - строка с макросами подстановки вида {{NAME}}
@@ -86,18 +102,11 @@ class Utils
 
     public static function checkActivationCode($code){
         $db = DB::getInstance();
-        $idUser = $db -> prepare('
-SELECT `users`.`id`,`users`.`ustatus_id`
-AS status
-FROM `users`
-WHERE `users`.`activation` = :code');
+        $idUser = $db -> prepare('SELECT `users`.`id`,`users`.`ustatus_id` AS status FROM `users` WHERE `users`.`activation` = :code');
         if($idUser -> execute(array('code' => $code))){
             $data = $idUser -> fetchAll(PDO::FETCH_ASSOC);
             if($data[0]['status'] == 3 and count ($data) == 1){
-                $result = $db -> prepare('
-UPDATE `users`
-SET `users`.`ustatus_id` = :user
-WHERE `users`.`activation` = :code');
+                $result = $db -> prepare('UPDATE `users` SET `users`.`ustatus_id` = :user WHERE `users`.`activation` = :code');
                 $result -> execute(array('user' => 2, 'code' => $code));
                 return $_SESSION['msg'] = 'Ваш аккаунт активирован. Теперь вы можете авторизоваться на форуме';
             }elseif ($data[0]['status'] == 2){
@@ -139,6 +148,7 @@ WHERE `users`.`activation` = :code');
         $_SESSION['uStatusID'] = null;
         $_SESSION['islogged']=null;
         $_SESSION['PHPSESSID']=null;
+
         $_COOKIE['PHPSESSID']=null;
         setcookie("PHPSESSID",null,time()-3600*25);
         header('Location: '.BASE_URL);
@@ -146,10 +156,7 @@ WHERE `users`.`activation` = :code');
     }
 
     public static  function saveCategory(){
-        $categoryDataToSave = DB::getInstance() -> prepare('
-INSERT INTO categories (name, description, user_id)
-VALUES (:name, :description, :user_id)');
-
+        $categoryDataToSave = DB::getInstance() -> prepare('INSERT INTO categories (name, description, user_id) VALUES (:name, :description, :user_id)');
         if($categoryDataToSave->execute(array(
             'name' => $_POST['catName'],
             'description' => $_POST['catDescription'],
@@ -162,10 +169,7 @@ VALUES (:name, :description, :user_id)');
     }
 
     public static  function saveTheme(){
-        $themeDataToSave = DB::getInstance() -> prepare('
-INSERT INTO themes (name, category_id, user_id)
- VALUES (:name, :category_id, :user_id)');
-
+        $themeDataToSave = DB::getInstance() -> prepare('INSERT INTO themes (name, category_id, user_id) VALUES (:name, :category_id, :user_id)');
         if($themeDataToSave->execute(array(
             'name' => $_POST['themeName'],
             'category_id' => $_GET['cat_id'],

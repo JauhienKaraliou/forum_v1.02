@@ -28,11 +28,11 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 /*Data for the table `categories` */
 
-insert  into `categories`(`id`,`name`,`description`,`user_id`) values (5,'Регулярные выражения','',38),(6,'Регулярные выражения 2','Вопросы связанные с регулярными выражениями',38),(7,'Регулярные выражения 3','Вопросы связанные с регулярными выражениями 3',38);
+insert  into `categories`(`id`,`name`,`description`,`user_id`) values (5,'Регулярные выражения','',38),(6,'Регулярные выражения 2','Вопросы связанные с регулярными выражениями',38),(7,'Регулярные выражения 3','Вопросы связанные с регулярными выражениями 3',38),(8,'Регулярные выражения 4','Вопросы связанные с регулярными выражениями 4',38),(9,'Регулярные выражения 5','',38),(10,'Регулярные выражения 6','',38),(11,'Регулярные выражения 7','',38),(12,'Регулярные выражения 8','Вопросы связанные с регулярными выражениями 8',38);
 
 /*Table structure for table `messages` */
 
@@ -69,11 +69,11 @@ CREATE TABLE `themes` (
   CONSTRAINT `themes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `themes_ibfk_2` FOREIGN KEY (`tstatus_id`) REFERENCES `tstatus` (`id`),
   CONSTRAINT `themes_ibfk_3` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `themes` */
 
-insert  into `themes`(`id`,`name`,`user_id`,`category_id`,`tstatus_id`) values (1,'Новая тема в регулярных выражениях',38,5,1),(2,'Вторая тема',39,5,1),(3,'Третья тема',39,5,1);
+insert  into `themes`(`id`,`name`,`user_id`,`category_id`,`tstatus_id`) values (1,'Новая тема в регулярных выражениях',38,5,1),(2,'Вторая тема',39,5,1),(3,'Третья тема',39,5,1),(4,'Первая тема',38,6,1),(5,'Тема',39,9,1),(6,'Вто',39,9,1),(7,'Третья тема',39,9,1),(8,'Первая тема',39,10,1),(9,'Первая тема',38,8,1);
 
 /*Table structure for table `tstatus` */
 
@@ -104,11 +104,11 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `ustatus_id` (`ustatus_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`ustatus_id`) REFERENCES `ustatus` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`name`,`email`,`password`,`about_me`,`activation`,`ustatus_id`) values (26,'LisaAlisa','natusik.lis@yandex.ru','800f0225f49152fc510ad22730fd40de','Я','db4377510642f6cccb8017860ba69215',2),(38,'Олеся','liskorzun@gmail.com','95462e888737d0184a48311362eb23c3','','481f3ef63949dc8af89e01303b36bd3d',1),(39,'Lisa','korzun@open.by','aae55d7b50de6d3aa6550e63c2f6bf74','Я продвинутый программист','dcf179bea5e7647cf4d75e6c61b27926',2);
+insert  into `users`(`id`,`name`,`email`,`password`,`about_me`,`activation`,`ustatus_id`) values (38,'Олеся','liskorzun@gmail.com','95462e888737d0184a48311362eb23c3','Я начинающий программист','481f3ef63949dc8af89e01303b36bd3d',1),(39,'Lisa','korzun@open.by','aae55d7b50de6d3aa6550e63c2f6bf74','Я продвинутый программист PHP','dcf179bea5e7647cf4d75e6c61b27926',2),(42,'LisaAlisa','natusik.lis@yandex.ru','8a53c0d76958985364022bfe9184a93f','','db4377510642f6cccb8017860ba69215',2);
 
 /*Table structure for table `ustatus` */
 

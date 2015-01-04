@@ -1,9 +1,18 @@
 .msg {
     color: #707070;
+    font-size: larger;
+    font-style: oblique;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: left;
+}
+.msg-buttons {
+    color: #707070;
     font-size: small;
     font-style: oblique;
     padding-bottom: 10px;
     padding-top: 10px;
+    text-align: center;
 }
 p.help-block {
     color: darkred;
@@ -17,7 +26,7 @@ p.help-block {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 15px;
-   text-align: center;
+    text-align: center;
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -52,4 +61,9 @@ td:last-child{
     border: 1px solid #ccc;
     border-radius: 10px;
     margin-bottom: 5px;
+}
+.btn-create{
+    background-color: #828282;
+    border: 1px solid #ccc;
+    color: white;
 }

@@ -1,26 +1,36 @@
-<form id="login-form" action="index.php" method="post" enctype="multipart/form-data" role="form"
-      class="form-inline">
-    Log-in:
+<form  method="post" class="form-horizontal">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Для входа введите имя и пароль</legend>
 
     <div class="form-group">
-        <label for="name" class="sr-only">Your name:</label>
-        <input type="text" title="Your name" name="username"  placeholder="Username"
-               required id="name" autocomplete="true" class="form-control input-md">
+        <label class="col-md-4 control-label" for="name">Ваше имя: </label>
+        <div class="col-md-4">
+            <input type="text" name="username"  placeholder="Иванов Иван" required id="name" autocomplete="true" class="form-control input-md">
+        </div>
     </div>
 
     <div class="form-group">
-        <label class="sr-only" for="password">Password:</label>
-        <input id="password" name="password" class="form-control input-md" type="password" title="Password"
-               required>
+        <label class="col-md-4 control-label" for="password">Пароль: </label>
+        <div class="col-md-4">
+            <input id="password" name="password" class="form-control input-md" type="password" title="Password" required>
+        </div>
     </div>
 
     <div class="form-group">
-        <input id="stay_logged_in" name="stay_logged_in" class="form-control input-md" type="checkbox"
-               title="Stay logged-in" value="true">Stay logged-in
+        <label class="col-md-4 control-label"></label>
+        <div class="col-md-4">
+            <input name="stay_logged_in" class="form-control input-md" type="checkbox" title="Stay logged-in" value="true"> Остаться в системе
+        </div>
     </div>
 
     <div class="form-group">
-        <input type="submit" name="action" value="LogIn" class="btn btn-primary form-control">
+        <label class="col-md-5 control-label"></label>
+        <div class="col-md-2" align="center">
+            <input type="submit" name="action" value="Login" class="btn btn-primary form-control">
+        </div>
     </div>
+    </fieldset>
 </form>
 <div>{{WRONG_LOGIN_MESSAGE}}</div>

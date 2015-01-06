@@ -45,10 +45,21 @@ class Template{
         }
         return  $this -> tpl;
     }
+
+    /**
+     * Возвращает шаблон в виде строки
+     * @return string
+     */
     public function __toString(){
         return $this -> tpl;
     }
 
+    /**
+     *                              //@todo напиши коммент
+     * @param $name
+     * @param array $statements
+     * @return mixed|string
+     */
     public static function getPageElement($name, array $statements)
     {
         $fileName = TPL_DIR . DIRECTORY_SEPARATOR . $name . '.html';

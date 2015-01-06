@@ -1,6 +1,6 @@
 <?php
 
-$id= htmlspecialchars($_GET['pageid']);
+$id= htmlspecialchars($_GET['pageid']); //@todo наверное тоже лучше (int) вместо htmlspecialchars()
     $sth = DB::getInstance()->prepare('SELECT `id`,`name`,`email`,`about_me` FROM `users` WHERE `id`= :id');
     $sth->execute(array('id'=>$id));
     $userInfo = $sth->fetch(PDO::FETCH_ASSOC);

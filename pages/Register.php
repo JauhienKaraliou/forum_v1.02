@@ -1,6 +1,5 @@
 <?php
-ini_set('session.bug_compat_warn', 0);
-ini_set('session.bug_compat_42', 0);
+
 $user = new User();
 $p = new Template('formRegister');
     if(Utils::isFormRegisterSubmitted()){
@@ -15,9 +14,15 @@ $p = new Template('formRegister');
                 $body = 'Здравствуйте!<br>Мы должны убедиться в том, что вы человек. Пожалуйста, подтвердите адрес вашей электронной почты, и можете начать использовать ваш аккаунт на сайте.<br><br><a href="'.BASE_URL.'?code='. $activation . '">'. BASE_URL .'?code='.$activation.'</a>';
                 $subject = "Подтверждение электронной почты на IT Форуме";
                 $to = $user -> getUserEmail();
-                $_SESSION['msg'] = "На ваш почтовый ящик отправлено письмо.<br> Для активации аккаунта, пройдите по ссылке в письме";
-                Utils::sendMail($to, $subject, $body);
-                Utils::redirect(BASE_URL);
+
+                if (Utils::sendMail($to, $subject, $body)){
+                    $_SESSION['msg'] = "На ваш почтовый ящик отправлено письмо.<br> Для активации аккаунта, пройдите по ссылке в письме";
+                    Utils::redirect(BASE_URL);
+                }else {
+                    $_SESSION['msg'] = "Мы не смогли отправить письмо на ваш ящик";
+                    Utils::redirect(BASE_URL);
+                }
+
             } else {
                 $msg = 'Ошибка сохранения';
             }

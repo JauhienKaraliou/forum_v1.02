@@ -1,3 +1,5 @@
 <?php
-Utils::checkActivationCode($_GET['code']);
-Utils::redirect(BASE_URL);
+if (isset($_GET['code'])) {
+    Utils::checkActivationCode($_GET['code']);
+    Utils::redirect(BASE_URL);
+}

@@ -5,6 +5,7 @@ class DB extends PDO{
     protected static $_instance;
 
     /**
+     * Создает подключение к базе данных
      * @param string $dsn
      * @param string $username
      * @param string $password
@@ -22,6 +23,10 @@ class DB extends PDO{
 
     }
 
+    /**
+     * Возвращает единственное подключение к базе данных
+     * @return DB
+     */
     public static function getInstance() {
         if (self::$_instance === null) {
             self::$_instance = new self;

@@ -45,7 +45,7 @@ if(User::$isLogged) {
     $_SESSION['islogged'] = true;
 
     if(Utils::isButtonPressed('Update')) {
-        $formID = htmlspecialchars($_POST['id']);
+        $formID = (int)$_POST['id'];
         if(User::$userID == $formID) {
             $sth=DB::getInstance()->prepare('UPDATE `users` SET `name`=:name, `about_me`=:about_me WHERE `id`=:id ');
             $arr = array('id'=> $_POST['id'],'name'=> $_POST['name'], 'about_me'=>$_POST['about_me']);
@@ -56,7 +56,7 @@ if(User::$isLogged) {
     }
 
 } else {
-    $_SESSION['msg'] = 'Логин и пароль не совпадают! Попробуйте снова!';
+    $_SESSION['msg'] = 'Логин и пароль не совпадают! Попробуйте снова! Или вы не подтвердили свой E-mail';
     Utils::redirect(BASE_URL);
 }
 

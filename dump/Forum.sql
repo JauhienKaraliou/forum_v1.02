@@ -12,10 +12,6 @@ MySQL - 5.5.40 : Database - forum
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`forum` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `forum`;
-
 /*Table structure for table `categories` */
 
 DROP TABLE IF EXISTS `categories`;
@@ -32,7 +28,7 @@ CREATE TABLE `categories` (
 
 /*Data for the table `categories` */
 
-insert  into `categories`(`id`,`name`,`description`,`user_id`) values (5,'Регулярные выражения','',38),(6,'Регулярные выражения 2','Вопросы связанные с регулярными выражениями',38),(7,'Регулярные выражения 3','Вопросы связанные с регулярными выражениями 3',38),(8,'Регулярные выражения 4','Вопросы связанные с регулярными выражениями 4',38),(9,'Регулярные выражения 5','',38),(10,'Регулярные выражения 6','',38),(11,'Регулярные выражения 7','',38),(12,'Регулярные выражения 8','Вопросы связанные с регулярными выражениями 8',38);
+insert  into `categories`(`id`,`name`,`description`,`user_id`) values (5,'Регулярные выражения','',38);
 
 /*Table structure for table `messages` */
 
@@ -43,12 +39,13 @@ CREATE TABLE `messages` (
   `name` varchar(255) NOT NULL,
   `user_id` int(11) unsigned NOT NULL,
   `theme_id` int(11) unsigned NOT NULL,
+  `hide_status` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `theme_id` (`theme_id`),
   CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`theme_id`) REFERENCES `themes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `messages` */
 
@@ -62,6 +59,7 @@ CREATE TABLE `themes` (
   `user_id` int(11) unsigned NOT NULL,
   `category_id` int(11) unsigned NOT NULL,
   `tstatus_id` int(11) unsigned NOT NULL DEFAULT '1',
+  `hide_status` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `tstatus_id` (`tstatus_id`),
@@ -69,11 +67,11 @@ CREATE TABLE `themes` (
   CONSTRAINT `themes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `themes_ibfk_2` FOREIGN KEY (`tstatus_id`) REFERENCES `tstatus` (`id`),
   CONSTRAINT `themes_ibfk_3` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 /*Data for the table `themes` */
 
-insert  into `themes`(`id`,`name`,`user_id`,`category_id`,`tstatus_id`) values (1,'Новая тема в регулярных выражениях',38,5,1),(2,'Вторая тема',39,5,1),(3,'Третья тема',39,5,1),(4,'Первая тема',38,6,1),(5,'Тема',39,9,1),(6,'Вто',39,9,1),(7,'Третья тема',39,9,1),(8,'Первая тема',39,10,1),(9,'Первая тема',38,8,1);
+insert  into `themes`(`id`,`name`,`user_id`,`category_id`,`tstatus_id`,`hide_status`) values (1,'Новая тема в регулярных выражениях',38,5,1,NULL),(2,'Вторая тема',39,5,1,NULL),(3,'Третья тема',39,5,1,NULL);
 
 /*Table structure for table `tstatus` */
 
@@ -104,11 +102,11 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   KEY `ustatus_id` (`ustatus_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`ustatus_id`) REFERENCES `ustatus` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`name`,`email`,`password`,`about_me`,`activation`,`ustatus_id`) values (38,'Олеся','liskorzun@gmail.com','95462e888737d0184a48311362eb23c3','Я начинающий программист','481f3ef63949dc8af89e01303b36bd3d',1),(39,'Lisa','korzun@open.by','aae55d7b50de6d3aa6550e63c2f6bf74','Я продвинутый программист PHP','dcf179bea5e7647cf4d75e6c61b27926',2),(42,'LisaAlisa','natusik.lis@yandex.ru','8a53c0d76958985364022bfe9184a93f','','db4377510642f6cccb8017860ba69215',2);
+insert  into `users`(`id`,`name`,`email`,`password`,`about_me`,`activation`,`ustatus_id`) values (38,'Олеся','liskorzun@gmail.com','95462e888737d0184a48311362eb23c3','Я начинающий программист','481f3ef63949dc8af89e01303b36bd3d',1),(39,'Lisa','korzun@open.by','aae55d7b50de6d3aa6550e63c2f6bf74','Я продвинутый программист PHP','dcf179bea5e7647cf4d75e6c61b27926',2);
 
 /*Table structure for table `ustatus` */
 

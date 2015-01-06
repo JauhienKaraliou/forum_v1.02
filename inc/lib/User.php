@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class User
+ * Класс Пользователя
+ */
 class User {
 
     private $userData = array();
@@ -40,6 +44,10 @@ class User {
         $this -> userData['captcha'] = isset($_POST['captcha']) ? trim($_POST['captcha']) : "";
     }
 
+    /**
+     * Проверяет уникальность и EMAIL
+     * @return mixed
+     */
     private function isNotUniqueEmail(){
         $db = DB::getInstance();
         $email = $db -> prepare('SELECT COUNT(users.id) AS count FROM users WHERE users.email = :email');
@@ -48,11 +56,20 @@ class User {
         return $count['count'];
     }
 
+    /**
+     * Проверяет капчу
+     * @param $answ
+     * @return bool
+     */
     private function checkCaptchaAnswer($answ){
         $rightAnsw = isset($_SESSION['captcha'])? $_SESSION['captcha']: '';
         return $answ == $rightAnsw;
     }
 
+    /**
+     * Проверяет валидность данных, введенных пользователем при регистрации
+     * @return bool
+     */
     public function isFormRegisterValid(){
         if (!preg_match('/^([a-zA-Zа-яА-Я0-9_]{3,}\s{0,1})+$/msiu', $this -> userData['name'])) {
             $this -> resp = false;
@@ -81,26 +98,50 @@ class User {
         return $this -> resp;
     }
 
+    /**
+     * Возвращает массив данных пользователя
+     * @return array
+     */
     public function getUserDataArray(){
         return  $this -> userData;
     }
 
+    /**
+     * Возвращает массив ошибок данных при регистрации
+     * @return array
+     */
     public function getFormRegisterErrors(){
         return $this -> errors;
     }
 
+    /**
+     * Возвращает активационный код для пользователя
+     * @return mixed
+     */
     public function getActivationCode(){
         return $this -> userData['activation'];
     }
 
+    /**
+     * Возвращмет email пользователя
+     * @return mixed
+     */
     public function getUserEmail(){
         return $this -> userData['email'];
     }
 
+    /**
+     * Возвращает имя пользователя
+     * @return mixed
+     */
     public function getUserName(){
         return $this -> userData['name'];
     }
 
+    /**
+     * Сохраняет данные пользователя в базу данных
+     * @return bool
+     */
     public function saveUserData (){
         $db = DB::getInstance();
         $password = md5($this -> userData['password']);
@@ -109,9 +150,9 @@ class User {
         if($userDataToSave->execute(array(
             'name' => htmlspecialchars($this -> userData['name']),
             'email' => htmlspecialchars($this -> userData['email']),
-            'password' => htmlspecialchars($password),
+            'password' => $password,
             'about_me' => htmlspecialchars($this -> userData['aboutMe']),
-            'activation' => htmlspecialchars($this -> userData['activation'])
+            'activation' => $this -> userData['activation']
         ))) {
             return true;
         } else {
@@ -119,6 +160,11 @@ class User {
         }
     }
 
+    /**                                 //@todo напиши коммент
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     public static function checkIfValid($username, $password)
     {
         $arr['username'] =$username;
@@ -135,6 +181,9 @@ class User {
         }
     }
 
+    /**                                //@todo напиши коммент
+     * @return array
+     */
     public static function getAllUsers()
     {
         $sth = DB::getInstance()->prepare('SELECT DISTINCT `id`,`name` FROM `users`');
@@ -143,6 +192,10 @@ class User {
         return $res;
     }
 
+    /**                                 //@todo напиши коммент
+     * @param $id
+     * @return mixed
+     */
     public static function getUserNameByID($id)
     {
         $sth = DB::getInstance()-> prepare('SELECT `name` FROM `users` WHERE `id`=:id');

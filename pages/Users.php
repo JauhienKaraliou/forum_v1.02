@@ -1,4 +1,5 @@
 <?php
+
 $userList = User::getAllUsers();
 $p = '<table class="table table-striped table-bordered">';
 foreach ($userList as $a) {

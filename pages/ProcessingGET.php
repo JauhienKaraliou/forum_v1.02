@@ -1,14 +1,6 @@
 <?php
 
-//Динамическое подключение нужных страниц
-//Все страницы такого типа содержат переменную $p, содержащую основной контент страницы
-$action = isset($_GET['action'])?$_GET['action']:'default';
-if (!file_exists('pages/'.$action.'.php')){
-    $action = 'default';
-    include 'pages/' . $action . '.php';
-} else {
-    include 'pages/' . $action . '.php';
-}
+
 
 //Перенаправление после авторизации
 if (isset($_GET['action']) == 'Login' AND isset($_POST['username'])){

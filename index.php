@@ -9,6 +9,16 @@ $msgButtons = '';
 $pageTitle = 'IT Forum';
 $footer = "&copy Powered by O&J, 2014";
 
+//Динамическое подключение нужных страниц
+//Все страницы такого типа содержат переменную $p, содержащую основной контент страницы
+$action = isset($_GET['action'])?$_GET['action']:'default';
+if (!file_exists('pages/'.$action.'.php')){
+    $action = 'default';
+    include 'pages/' . $action . '.php';
+} else {
+    include 'pages/' . $action . '.php';
+}
+
 //Проверка, авторизован ли пользователь
 if(Utils::checkSession('islogged') OR Utils::checkCookies('username') OR Utils::checkPost('username')) {
     include 'pages/Home.php';

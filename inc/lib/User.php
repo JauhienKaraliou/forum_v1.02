@@ -107,11 +107,11 @@ class User {
         $this -> userData['activation'] = md5($this -> userData['email']);
         $userDataToSave = $db -> prepare('INSERT INTO users (name, email, password, about_me, activation) VALUES (:name, :email, :password, :about_me, :activation)');
         if($userDataToSave->execute(array(
-            'name' => $this -> userData['name'],
-            'email' => $this -> userData['email'],
-            'password' => $password,
-            'about_me' => $this -> userData['aboutMe'],
-            'activation' => $this -> userData['activation']
+            'name' => htmlspecialchars($this -> userData['name']),
+            'email' => htmlspecialchars($this -> userData['email']),
+            'password' => htmlspecialchars($password),
+            'about_me' => htmlspecialchars($this -> userData['aboutMe']),
+            'activation' => htmlspecialchars($this -> userData['activation'])
         ))) {
             return true;
         } else {
@@ -141,5 +141,12 @@ class User {
         $sth->execute();
         $res= $sth->fetchAll();
         return $res;
+    }
+
+    public static function getUserNameByID($id)
+    {
+        $sth = DB::getInstance()-> prepare('SELECT `name` FROM `users` WHERE `id`=:id');
+        $sth->execute(array('id'=>$id));
+        return $sth -> fetch(PDO::FETCH_ASSOC);
     }
 }

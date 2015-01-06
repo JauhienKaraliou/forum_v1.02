@@ -150,7 +150,7 @@ class Utils
         $_SESSION['PHPSESSID']=null;
 
         $_COOKIE['PHPSESSID']=null;
-        setcookie("PHPSESSID",null,time()-3600*25);
+        setcookie(session_name(),null,time()-3600*25);
         header('Location: '.BASE_URL);
         die();
     }
@@ -158,8 +158,8 @@ class Utils
     public static  function saveCategory(){
         $categoryDataToSave = DB::getInstance() -> prepare('INSERT INTO categories (name, description, user_id) VALUES (:name, :description, :user_id)');
         if($categoryDataToSave->execute(array(
-            'name' => $_POST['catName'],
-            'description' => $_POST['catDescription'],
+            'name' => htmlspecialchars($_POST['catName']),
+            'description' => htmlspecialchars($_POST['catDescription']),
             'user_id' => User::$userID
         ))){
             return true;
@@ -171,10 +171,27 @@ class Utils
     public static  function saveTheme(){
         $themeDataToSave = DB::getInstance() -> prepare('INSERT INTO themes (name, category_id, user_id) VALUES (:name, :category_id, :user_id)');
         if($themeDataToSave->execute(array(
-            'name' => $_POST['themeName'],
-            'category_id' => $_GET['cat_id'],
+            'name' => htmlspecialchars($_POST['themeName']),
+            'category_id' => htmlspecialchars($_GET['cat_id']),
             'user_id' => User::$userID
         ))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function saveMsg()
+    {
+        $msgDataToSave = DB::getInstance() -> prepare('INSERT INTO messages (name, user_id, theme_id)
+                                                       VALUES (:name, :user_id, :theme_id )');
+        $when = date("Y-m-d H:i:s");
+        if ($msgDataToSave-> execute(array(
+            'name' => htmlspecialchars($_POST['messagetext']).'<br><small>'.$when.'</small>',    // да, этот костыль
+            // дописывает дату создания в сообщение, т.к. в базе это не предусмотрелось
+            'user_id' => User::$userID,
+            'theme_id' => htmlspecialchars($_GET['theme_id'])
+        ))) {
             return true;
         } else {
             return false;
@@ -219,4 +236,33 @@ class Utils
         }
         return $p;
     }
+
+    public static function getMessagesByIDTheme($id)
+    {
+        $sth = DB::getInstance()->prepare('SELECT * FROM `messages` WHERE `theme_id`=:id');
+        $sth -> execute(array('id'=>$id));
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getHtmlListOfMessages( array $data = array())
+    {
+        $p = '';
+        foreach ($data as $row) {
+            $msgTpl = new Template('itemOfMsg');
+            $username = User::getUserNameByID($row['user_id']);
+            $p.= $msgTpl->processTemplate( array(
+                'name'=> $row['name'],
+                'username'=>$username['name']
+            ));
+        }
+        return $p;
+    }
+
+    public static function getHtmlFormAddMsg ()
+    {
+        $form = new Template('formAddMessage');
+        return $form->processTemplate();
+    }
+
+
 }

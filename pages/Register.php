@@ -1,5 +1,7 @@
 <?php
-
+ini_set('session.bug_compat_warn', 0);
+ini_set('session.bug_compat_42', 0);
+$user = new User();
 $p = new Template('formRegister');
     if(Utils::isFormRegisterSubmitted()){
         $userData = $user-> getUserDataArray();

@@ -142,4 +142,11 @@ class User {
         $res= $sth->fetchAll();
         return $res;
     }
+
+    public static function getUserNameByID($id)
+    {
+        $sth = DB::getInstance()-> prepare('SELECT `name` FROM `users` WHERE `id`=:id');
+        $sth->execute(array('id'=>$id));
+        return $sth -> fetch(PDO::FETCH_ASSOC);
+    }
 }

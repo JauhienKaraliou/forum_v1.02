@@ -4,7 +4,7 @@ require_once('inc/inc.php');
 
 $page = new Template('page');
 $buttons = new Template('ButtonsLoginAndRegister');
-$user = new User();
+$user = new User();  //@todo удалить или перенести в регистрацию - тут он не нужен
 $msg = '';
 $msgButtons = '';
 $pageTitle = 'IT Forum';
@@ -57,5 +57,6 @@ $page = $page -> processTemplate(array(
 ));
 
 echo $page;
+
 
 

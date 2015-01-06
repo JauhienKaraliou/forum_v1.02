@@ -6,9 +6,8 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
     User::$userID = $_SESSION['userID'];
     User::$userStatusID = $_SESSION['uStatusID'];
 
-} elseif (Utils::checkCookies('PHPSESSID') and User::$isLogged) {
-    //  $sessionName = session_name();
-    setcookie('PHPSESSID', session_id(), time()+3600*24);
+} elseif (Utils::checkCookies(session_name()) and User::$isLogged) {
+    setcookie(session_name(), session_id(), time()+3600*24);
 
 } elseif(Utils::checkPost('username') and Utils::checkPost('password')) {
     User::$username = htmlspecialchars($_POST['username']);
@@ -16,8 +15,7 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
 
     User::$isLogged = User::checkIfValid(User::$username, $password);
     if(Utils::checkPost('stay_logged_in') and User::$isLogged==true) {
-        //$sessionName = session_name();
-        setcookie('PHPSESSID', session_id(), time()+3600*24); //put in a method
+        setcookie(session_name(), session_id(), time()+3600*24); //put in a method
     }
 }
 

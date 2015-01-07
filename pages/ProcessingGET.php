@@ -31,13 +31,13 @@ if (Utils::checkGet('theme_id')) {
 
     $messages = Utils::getMessagesByIDTheme($_GET['theme_id']);
     if (empty($messages)) {
-        $p = 'no messages. be the first!';
+        $p = 'В данной теме пока еще нет ни одного сообщения!';
     } else {
         $p = Utils::getHtmlListOfMessages($messages);
     }
-
-    $p.= Utils::getHtmlFormAddMsg();
-
+    if(User::$isLogged) {
+        $p .= Utils::getHtmlFormAddMsg();
+    }
     if (Utils::checkGet('cat_id')) {  // если переход произошёл по дереву тем добавляется кнопка возврата в категорию
         $msg = '<a href ="' . BASE_URL . '?cat_id=' . $_GET['cat_id'] . '"class="btn btn-inverse">В КАТЕГОРИЮ</a>';//@todo использовать getUrl из Utils, например Utils::getUrl(array('cat_id' => $_GET['cat_id'])
     } else { // если обратились напрямую к теме добавляется кнопка возврата в главное меню

@@ -8,9 +8,17 @@ $id= htmlspecialchars($_GET['pageid']); //@todo наверное тоже луч
         if($userInfo['name'] == $_SESSION['username']) {
             $usrpage = new Template('userPageOwn');
             $p = $usrpage->processTemplate($userInfo);
+            $tab = new Template('userPageTabInformation');
+            $messages = Utils::getMessagesByUserId($_GET['pageid']);
+            //var_dump($messages);
+            $mesHtml = Utils::getHtmlListOfMessagesForTab($messages);
+            //var_dump($mesHtml);
+            $p .= '<br>'.$tab -> processTemplate(array(
+                'MES' => $mesHtml));
         } else {
             $usrpage = new Template('userpage');
-           $p = $usrpage -> processTemplate($userInfo);
+            $p = $usrpage -> processTemplate($userInfo);
+            $p .= new Template('userPageTabInformation');
         }
     } else {
         $userList = User::getAllUsers();

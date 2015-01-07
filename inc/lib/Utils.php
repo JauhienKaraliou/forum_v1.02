@@ -285,7 +285,7 @@ class Utils
         foreach($data as $row){
             $catTpl = new Template('itemOfCategory');
             $p .= $catTpl->processTemplate(array(
-                'CAT_ID' => $row['id'],
+                'URL' =>  Utils::getUrl(array('cat_id' => $row['id'])),
                 'CAT_NAME' => $row['name'],
                 'CAT_DESCRIPTION' => $row['description']
             ));
@@ -335,14 +335,32 @@ class Utils
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function getMessagesByUserId($id){
+        $sth = DB::getInstance()->prepare('SELECT `messages`.`name` AS mes, `themes`.`name` AS them, `themes`.`category_id` AS cat_id, `themes`.`id` AS theme_id FROM `messages`, `themes` WHERE `messages`.`user_id`=:id AND `themes`.`id` =`messages`.`theme_id`');
+        $sth -> execute(array('id'=>$id));
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getHtmlListOfMessagesForTab(array $data = array()){
+        $p = '';
+        foreach ($data as $row) {
+            $msgTpl = new Template('itemOfCategory');
+            $p.= $msgTpl->processTemplate( array(
+                'CAT_DESCRIPTION'=> $row['mes'],
+                'CAT_NAME'=>'В Теме: '.$row['them'],
+                'URL' =>  Utils::getUrl(array('cat_id' => $row['cat_id'], 'theme_id' => $row['theme_id']))
+            ));
+        }
+        return $p;
+    }
+
     /**
      * Формирует HTML из массива сообщений
      * @param array $data
      * @return string
      */
-    public static function getHtmlListOfMessages( array $data = array())
-    {
-        $p = '';
+    public static function getHtmlListOfMessages( array $data = array()){
+        $p = '<br>';
         foreach ($data as $row) {
             $msgTpl = new Template('itemOfMsg');
             $username = User::getUserNameByID($row['user_id']);

@@ -14,9 +14,9 @@ $footer = "&copy Powered by O&J, 2014";
 
 //Динамическое подключение нужных страниц
 //Все страницы такого типа содержат переменную $p, содержащую основной контент страницы
-$action = isset($_GET['action'])?$_GET['action']:'default';
+$action = isset($_GET['action'])?$_GET['action']:'Default';
 if (!file_exists('pages/'.$action.'.php')){
-    $action = 'default';
+    $action = 'Default';
     include 'pages/' . $action . '.php';
 } else {
     include 'pages/' . $action . '.php';

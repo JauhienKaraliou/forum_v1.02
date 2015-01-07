@@ -1,12 +1,15 @@
 <?php
-
+//To DELETE after reading
+//Пробеги по файлам .php кое-где вставляла для тебя //@todo
+//Списки для пользователей сделала можно проверить http://liskorzun.ru
+//Кстати на бесплатном хостинге рассылка писем уже заработала http://liskorzun.besaba.com/forum/
 require_once('inc/inc.php');
 
 $page = new Template('page');
 $buttons = new Template('ButtonsLoginAndRegister');
 $msg = '';
 $msgButtons = '';
-$pageTitle = 'IT Forum';
+$pageTitle = 'IT Форум';
 $footer = "&copy Powered by O&J, 2014";
 
 //Динамическое подключение нужных страниц

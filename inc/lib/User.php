@@ -85,7 +85,7 @@ class User {
         }
         if (!preg_match('/\A(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])\S{6,}\z/', $this -> userData['password'])) {
             $this -> resp = false;
-            $this -> errors['password'] = 'Пароль должен содержать хотя бы одну большую букву, маленькую букву и цифру и быть не меннее 8 символов';
+            $this -> errors['password'] = 'Пароль должен содержать хотя бы одну большую букву, маленькую букву и цифру и быть не меннее 7 символов';
         }
         if ($this -> userData['password'] !== $this -> userData['passwordrepeat']){
             $this -> resp = false;

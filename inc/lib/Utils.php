@@ -335,12 +335,22 @@ class Utils
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Извлекает все сообщения определенного пользователя
+     * @param $id ID пользователя
+     * @return array
+     */
     public static function getMessagesByUserId($id){
-        $sth = DB::getInstance()->prepare('SELECT `messages`.`name` AS mes, `themes`.`name` AS them, `themes`.`category_id` AS cat_id, `themes`.`id` AS theme_id FROM `messages`, `themes` WHERE `messages`.`user_id`=:id AND `themes`.`id` =`messages`.`theme_id`');
+        $sth = DB::getInstance()->prepare('SELECT `messages`.`name` AS mes, `themes`.`name` AS them, `themes`.`category_id` AS cat_id, `themes`.`id` AS theme_id FROM `messages`, `themes` WHERE `messages`.`user_id`=:id AND `themes`.`id` =`messages`.`theme_id` ORDER BY theme_id');
         $sth -> execute(array('id'=>$id));
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Формирует HTML из массива сообщений
+     * @param array $data
+     * @return string
+     */
     public static function getHtmlListOfMessagesForTab(array $data = array()){
         $p = '';
         foreach ($data as $row) {
@@ -348,6 +358,35 @@ class Utils
             $p.= $msgTpl->processTemplate( array(
                 'CAT_DESCRIPTION'=> $row['mes'],
                 'CAT_NAME'=>'В Теме: '.$row['them'],
+                'URL' =>  Utils::getUrl(array('cat_id' => $row['cat_id'], 'theme_id' => $row['theme_id']))
+            ));
+        }
+        return $p;
+    }
+
+    /**
+     * Извлекает все Темы, в которых писал определенный пользователь
+     * @param $id ID пользователя
+     * @return array
+     */
+    public static function getThemesByUserId($id){
+        $sth = DB::getInstance()->prepare('SELECT `themes`.`name` AS them, `themes`.`category_id` AS cat_id, `themes`.`id` AS theme_id FROM `messages`, `themes` WHERE `messages`.`user_id`=:id AND `themes`.`id` =`messages`.`theme_id` GROUP BY theme_id');
+        $sth -> execute(array('id'=>$id));
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Формирует HTML из массива тем
+     * @param array $data
+     * @return string
+     */
+    public static function getHtmlListOfThemesForTab(array $data = array()){
+        $p = '';
+        foreach ($data as $row) {
+            $msgTpl = new Template('itemOfCategory');
+            $p.= $msgTpl->processTemplate( array(
+                'CAT_DESCRIPTION'=> '',
+                'CAT_NAME'=> $row['them'],
                 'URL' =>  Utils::getUrl(array('cat_id' => $row['cat_id'], 'theme_id' => $row['theme_id']))
             ));
         }

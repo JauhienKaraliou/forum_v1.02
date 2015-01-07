@@ -8,18 +8,24 @@ $id= htmlspecialchars($_GET['pageid']); //@todo наверное тоже луч
         if($userInfo['name'] == $_SESSION['username']) {
             $usrpage = new Template('userPageOwn');
             $p = $usrpage->processTemplate($userInfo);
-            $tab = new Template('userPageTabInformation');
-            $messages = Utils::getMessagesByUserId($_GET['pageid']);
-            //var_dump($messages);
-            $mesHtml = Utils::getHtmlListOfMessagesForTab($messages);
-            //var_dump($mesHtml);
-            $p .= '<br>'.$tab -> processTemplate(array(
-                'MES' => $mesHtml));
         } else {
             $usrpage = new Template('userpage');
             $p = $usrpage -> processTemplate($userInfo);
-            $p .= new Template('userPageTabInformation');
         }
+        $tab = new Template('userPageTabInformation');
+        if (Utils::getMessagesByUserId($_GET['pageid'])){
+        $messages = Utils::getMessagesByUserId($_GET['pageid']);
+        $mesHtml = Utils::getHtmlListOfMessagesForTab($messages);
+        $themes = Utils::getThemesByUserId($_GET['pageid']);
+        $themHTML = Utils::getHtmlListOfThemesForTab($themes);
+        } else {
+            $mesHtml = 'Данный пользователь не написал еще ни одного сообщения';
+            $themHTML = 'Поэтому и раздел тем пустой';
+        }
+        $p .= '<br>'.$tab -> processTemplate(array(
+                'MES' => $mesHtml,
+                'THEM' => $themHTML));
+        $msg = '<a href="'.BASE_URL.'" class="btn btn-inverse">ВСЕ КАТЕГОРИИ</a>';
     } else {
         $userList = User::getAllUsers();
         $p = '<table class="table table-striped table-bordered">';

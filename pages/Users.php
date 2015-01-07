@@ -8,3 +8,4 @@ foreach ($userList as $a) {
         'PAGE_ID' => $a['id']));
 }
 $p .= '</table>';
+$msg = '<a href="'.BASE_URL.'" class="btn btn-inverse">ВСЕ КАТЕГОРИИ</a>';

@@ -29,10 +29,10 @@ define('DB_NAME', 'forum');
 //define('DB_NAME', 'u854433554_forum');
 
 define('DB_DSN', 'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8');
-define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME']. $_SERVER['PHP_SELF']);
+//define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME']. $_SERVER['PHP_SELF']);
 
 //for Olesya's localhost
-//define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME'].':'. $_SERVER['SERVER_PORT'] .$_SERVER['PHP_SELF']);
+define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME'].':'. $_SERVER['SERVER_PORT'] .$_SERVER['PHP_SELF']);
 
 //define('MAIL_USER', 'admin@liskorzun.besaba.com');
 //define('MAIL_PASSWORD', '7781070');

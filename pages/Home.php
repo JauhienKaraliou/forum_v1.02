@@ -22,15 +22,19 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
 if(User::$isLogged) {
     $user = new User();
     $buttons = new Template('ButtonsExitAndUsers');
-    if (User::$userStatusID == 1 AND !Utils::checkGet('cat_id')){
-        $buttons .= new Template('ButtonCreateCategory');
-        $uStatus = 'Администратора';
-    } elseif (User::$userStatusID == 1 AND Utils::checkGet('cat_id')){
-        $url = Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'action' => 'Newtheme'));
-        $button = new Template('ButtonCreateTheme');
-        $buttons .= $button -> processTemplate(array('URL' => $url));
-        $uStatus = 'Администратора';
-    } elseif (User::$userStatusID == 2 AND Utils::checkGet('cat_id')){
+    if (User::$userStatusID == 1 ){
+        if(!Utils::checkGet('cat_id') AND !(isset($_GET['action']) == 'Users')){
+            $buttons .= new Template('ButtonCreateCategory');
+            $uStatus = 'Администратора';
+        } elseif (Utils::checkGet('cat_id') AND !Utils::checkGet('theme_id')){
+            $url = Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'action' => 'Newtheme'));
+            $button = new Template('ButtonCreateTheme');
+            $buttons .= $button -> processTemplate(array('URL' => $url));
+            $uStatus = 'Администратора';
+        } else {
+            $uStatus = 'Администратора';
+        }
+    } elseif (User::$userStatusID == 2 AND Utils::checkGet('cat_id') AND !Utils::checkGet('theme_id')){
         $url = Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'action' => 'Newtheme'));
         $button = new Template('ButtonCreateTheme');
         $buttons .= $button -> processTemplate(array('URL' => $url));

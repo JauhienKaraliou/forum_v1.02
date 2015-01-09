@@ -330,8 +330,9 @@ class Utils
      */
     public static function getMessagesByIDTheme($id)
     {
-        $sth = DB::getInstance()->prepare('SELECT * FROM `messages` WHERE `theme_id`=:id');
-        $sth -> execute(array('id'=>$id));
+        $sth = DB::getInstance()->prepare('SELECT * FROM `messages` WHERE (`theme_id`=:id AND `hide_status`!=:hide_status)');
+        $sth -> execute(array('id'=>$id,
+                              'hide_status'=>'1'));
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -400,12 +401,14 @@ class Utils
      */
     public static function getHtmlListOfMessages( array $data = array()){
         $p = '<br>';
+        $tplName = (User::$userStatusID==1)?'itemOfMsgForAdmin':'itemOfMsg';
         foreach ($data as $row) {
-            $msgTpl = new Template('itemOfMsg');
+            $msgTpl = new Template($tplName);
             $username = User::getUserNameByID($row['user_id']);
             $p.= $msgTpl->processTemplate( array(
                 'name'=> $row['name'],
-                'username'=>$username['name']
+                'username'=>$username['name'],
+                'msgid'=> $row['id']
             ));
         }
         return $p;
@@ -418,6 +421,20 @@ class Utils
     {
         $form = new Template('formAddMessage');
         return $form->processTemplate();
+    }
+
+    public static function deleteMsg(array $data = array())
+    {
+        $res = 1;
+        $sth = DB::getInstance()-> prepare('UPDATE `messages` SET `hide_status`=:hide_status WHERE `id`=:id');
+        foreach ($data as $row) {
+            $res =$sth -> execute(array(
+                'hide_status'=>1,
+                'id'=>$row
+            ));
+            $res *=$res;
+        }
+        return $res;
     }
 
 

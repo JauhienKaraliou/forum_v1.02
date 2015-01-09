@@ -32,4 +32,19 @@ if (Utils::isButtonPressed('Create') AND Utils::checkPost('catName')){
         ));
         Utils::redirect($url);
     }
+
+} elseif (Utils::isButtonPressed('Delete')) {
+    if(Utils::deleteMsg($_POST['msgid'])) {
+        $_SESSION['msg'] = 'Успешно удалено';
+        $url = Utils::getUrl(array('cat_id'=> $_GET['cat_id'],
+            'theme_id'=>$_GET['theme_id']
+        ));
+        Utils::redirect($url);
+    } else {
+        $_SESSION['msg'] = 'Произошла ошибка удаления';
+        $url = Utils::getUrl(array('cat_id'=> $_GET['cat_id'],
+            'theme_id'=>$_GET['theme_id']
+        ));
+        Utils::redirect($url);
+    }
 }

@@ -2,7 +2,8 @@
 SQLyog Ultimate v10.42 
 MySQL - 5.5.40 : Database - forum
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -13,6 +14,9 @@ MySQL - 5.5.40 : Database - forum
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*Table structure for table `categories` */
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`forum` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `forum`;
 
 DROP TABLE IF EXISTS `categories`;
 

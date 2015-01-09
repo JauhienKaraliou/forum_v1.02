@@ -35,7 +35,7 @@ if (isset($_SESSION['msg'])) {
     $_SESSION['msg'] = NULL;
 }
 //Обработка нажатия кнопки Create
-elseif (Utils::isButtonPressed('Create')){
+elseif (Utils::isButtonPressed('Create') or Utils::isButtonPressed('Delete')){
     include 'pages/ProcessingPressingCreate.php';
 }
 //Обработка суперглобального массива GET
@@ -50,6 +50,7 @@ $page = $page -> processTemplate(array(
     'MSG_BUTTONS' => $msgButtons,
     'BUTTONS' => $buttons
 ));
+
 
 echo $page;
 

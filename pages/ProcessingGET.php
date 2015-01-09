@@ -15,7 +15,7 @@ if (Utils::checkGet('pageid')) {
 }
 
 //Проверка выбрана ли категория для которой показать темы
-if (Utils::checkGet('cat_id') AND !isset($_GET['action'])){
+if (Utils::checkGet('cat_id') AND !isset($_GET['action']) and !Utils::checkGet('theme_id')){
 
     $themes = Utils::getThemesByIdOfCategory($_GET['cat_id']);
     if (empty($themes)){
@@ -33,9 +33,18 @@ if (Utils::checkGet('theme_id')) {
     if (empty($messages)) {
         $p = 'В данной теме пока еще нет ни одного сообщения!';
     } else {
-        $p = Utils::getHtmlListOfMessages($messages);
+        if(User::$userStatusID==1) {
+            $adminKit = new Template('formDeleteMsgHeader');
+            $p = $adminKit -> processTemplate(array());
+        }
+        $p .= Utils::getHtmlListOfMessages($messages);
     }
+
     if(User::$isLogged) {
+        if(User::$userStatusID==1 and !empty($messages)) {
+            $adminKit = new Template('formDeleteMsg');
+            $p.= $adminKit -> processTemplate(array());
+        }
         $p .= Utils::getHtmlFormAddMsg();
     }
     if (Utils::checkGet('cat_id')) {  // если переход произошёл по дереву тем добавляется кнопка возврата в категорию
@@ -45,3 +54,6 @@ if (Utils::checkGet('theme_id')) {
     }
 
  }
+
+
+

@@ -13,7 +13,7 @@ define('CLS_DIR', 'lib');
 //localhost
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASSWORD', '7781070');
+define('DB_PASSWORD', '1276547');
 define('DB_NAME', 'forum');
 
 //http://liskorzun.ru

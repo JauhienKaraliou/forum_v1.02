@@ -315,9 +315,8 @@ class Utils
             $themeTpl = new Template('itemOfTheme');
             $id = (int) $row['id'];
             $p .= $themeTpl->processTemplate(array(
-                'THEME_ID' => $id,
+                'URL' =>  Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'theme_id' => $id)),
                 'THEME_NAME' => $row['name'],
-                'CAT_ID' => $_GET['cat_id'],
             ));
         }
         return $p;
@@ -330,7 +329,7 @@ class Utils
      */
     public static function getMessagesByIDTheme($id)
     {
-        $sth = DB::getInstance()->prepare('SELECT * FROM `messages` WHERE (`theme_id`=:id AND `hide_status`!=:hide_status)');
+        $sth = DB::getInstance()->prepare('SELECT * FROM `messages` WHERE (`theme_id`=:id AND `hide_status` = !:hide_status)');
         $sth -> execute(array('id'=>$id,
                               'hide_status'=>'1'));
         return $sth->fetchAll(PDO::FETCH_ASSOC);

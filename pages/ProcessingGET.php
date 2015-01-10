@@ -37,7 +37,7 @@ if (Utils::checkGet('theme_id')) {
             $adminKit = new Template('formDeleteMsgHeader');
             $p = $adminKit -> processTemplate(array());
         }
-        $p .= Utils::getHtmlListOfMessages($messages);
+        $p = Utils::getHtmlListOfMessages($messages);
     }
 
     if(User::$isLogged) {

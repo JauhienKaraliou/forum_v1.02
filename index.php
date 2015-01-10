@@ -6,7 +6,10 @@
 require_once('inc/inc.php');
 
 $page = new Template('page');
-$buttons = new Template('ButtonsLoginAndRegister');
+$but = new Template('ButtonsLoginAndRegister');
+$buttons = $but -> processTemplate(array(
+    'URL_LOGIN' =>  Utils::getUrl(array('action' => 'Login')),
+    'URL_REGISTER' => Utils::getUrl(array('action' => 'Register'))));
 $msg = '';
 $msgButtons = '';
 $pageTitle = 'IT Форум';
@@ -51,8 +54,4 @@ $page = $page -> processTemplate(array(
     'BUTTONS' => $buttons
 ));
 
-
 echo $page;
-
-
-

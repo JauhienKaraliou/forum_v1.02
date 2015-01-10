@@ -21,10 +21,15 @@ if(Utils::checkSession('islogged') and  $_SESSION['islogged']==true and Utils::c
 
 if(User::$isLogged) {
     $user = new User();
-    $buttons = new Template('ButtonsExitAndUsers');
+    $but = new Template('ButtonsExitAndUsers');
+    $buttons = $but -> processTemplate(array(
+        'URL_USERS' =>  Utils::getUrl(array('action' => 'Users')),
+        'URL_EXIT' => Utils::getUrl(array('action' => 'Exit'))));
     if (User::$userStatusID == 1 ){
         if(!Utils::checkGet('cat_id') AND !(isset($_GET['action']) == 'Users')){
-            $buttons .= new Template('ButtonCreateCategory');
+            $button = new Template('ButtonCreateCategory');
+            $buttons .= $button -> processTemplate(array(
+                'URL_NEWCAT' =>  Utils::getUrl(array('action' => 'Newcategory'))));
             $uStatus = 'Администратора';
         } elseif (Utils::checkGet('cat_id') AND !Utils::checkGet('theme_id')){
             $url = Utils::getUrl(array('cat_id' => $_GET['cat_id'], 'action' => 'Newtheme'));
